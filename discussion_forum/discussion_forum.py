@@ -56,6 +56,11 @@ class DiscussionXBlock(XBlock):
 
         fragment.add_css_url(self.runtime.local_resource_url(
             self,
+            'public/css/discussion-old.css'
+        ))
+
+        fragment.add_css_url(self.runtime.local_resource_url(
+            self,
             'public/css/discussions-inline.css'
         ))
         return fragment

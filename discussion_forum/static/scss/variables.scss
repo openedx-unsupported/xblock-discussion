@@ -1,3 +1,5 @@
+@import 'bourbon/bourbon';
+
 // base
 $baseline: 20px;
 
@@ -321,4 +323,3 @@ $f-monospace: 'Bitstream Vera Sans Mono', Consolas, Courier, monospace;
 // SPLINT: colors
 
 $msg-bg: $action-primary-bg;
-

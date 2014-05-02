@@ -1,4 +1,7 @@
 @import 'bourbon/bourbon';
+@import 'mixins';
+@import 'variables';
+@import 'typography';
 
 @mixin blue-button {
   display: block;
