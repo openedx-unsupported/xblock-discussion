@@ -3,8 +3,10 @@
 import os
 import pkg_resources
 
+from django.conf import settings
 from django.template import Context, Template
 
+from mako.template import Template as MakoTemplate
 
 # Functions #########################################################
 
@@ -22,6 +24,29 @@ def render_template(template_path, context={}):
     template_str = load_resource(template_path)
     template = Template(template_str)
     return template.render(Context(context))
+
+def render_mustache_templates(mustache_dir):
+
+    def is_valid_file_name(file_name):
+        return file_name.endswith('.mustache')
+
+    def read_file(file_name):
+        return open(mustache_dir + '/' + file_name, "r").read().decode('utf-8')
+
+    def template_id_from_file_name(file_name):
+        return file_name.rpartition('.')[0]
+
+    def process_mako(template_content):
+        return MakoTemplate(template_content).render_unicode()
+
+    def make_script_tag(id, content):
+        return u"<script type='text/template' id='{0}'>{1}</script>".format(id, content)
+
+    return u'\n'.join(
+        make_script_tag(template_id_from_file_name(file_name), process_mako(read_file(file_name)))
+        for file_name in os.listdir(mustache_dir)
+        if is_valid_file_name(file_name)
+    )
 
 def get_scenarios_from_path(scenarios_path, include_identifier=False):
     """
