@@ -4,6 +4,7 @@ import os
 import logging
 import uuid
 import datetime
+
 from uuid import uuid4
 
 from lxml import etree
@@ -53,8 +54,7 @@ JS = [
 # Classes ###########################################################
 
 class DiscussionXBlock(XBlock):
-    # TODO This is currently generated on each lms start... make it static
-    discussion_id = String(scope=Scope.settings, default=uuid4().hex)
+    discussion_id = String(scope=Scope.content, default=None)
 
     display_name = String(
         display_name="Display Name",
@@ -80,6 +80,9 @@ class DiscussionXBlock(XBlock):
         scope=Scope.settings
     )
     sort_key = String(scope=Scope.settings)
+
+    def get_new_uuid(self):
+        return uuid4().hex
 
     def student_view(self, context=None):
         fragment = Fragment()
@@ -168,6 +171,12 @@ class DiscussionXBlock(XBlock):
         """
         Editing view in Studio
         """
+
+        # TODO can studio do something like that without going to edit and save?
+        # Set the discussion_id
+        if self.discussion_id is None:
+            self.discussion_id = self.get_new_uuid()
+
         fragment = Fragment()
         # fragment.add_content(render_template('templates/html/discussion_edit.html', {
         #     'self': self,
