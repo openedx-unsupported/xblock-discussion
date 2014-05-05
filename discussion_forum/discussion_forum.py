@@ -84,6 +84,13 @@ class DiscussionXBlock(XBlock):
     def get_new_uuid(self):
         return uuid4().hex
 
+    @property
+    def course_id(self):
+        # TODO really implement this
+        if hasattr(self, 'xmodule_runtime'):
+            return self.xmodule_runtime.course_id
+        return 'foo'
+
     def student_view(self, context=None):
         fragment = Fragment()
 
@@ -97,7 +104,7 @@ class DiscussionXBlock(XBlock):
         ))
 
         fragment.add_javascript(render_template('public/js/discussion_block.js', {
-            'course_id': self.xmodule_runtime.course_id
+            'course_id': self.course_id
         }))
 
         fragment.add_content(render_mustache_templates(
@@ -167,24 +174,43 @@ class DiscussionXBlock(XBlock):
 
         return fragment
 
-    def studio_view(self, context):
+    @XBlock.json_handler
+    def studio_submit(self, data, suffix=''):  # pylint: disable=unused-argument
         """
-        Editing view in Studio
         """
-
         # TODO can studio do something like that without going to edit and save?
         # Set the discussion_id
         if self.discussion_id is None:
             self.discussion_id = self.get_new_uuid()
 
         fragment = Fragment()
-        # fragment.add_content(render_template('templates/html/discussion_edit.html', {
-        #     'self': self,
-        #     'xml_content': self.xml_content or self.default_xml_content,
-        # }))
-        # fragment.add_javascript(load_resource('public/js/discussion_edit.js'))
-        # fragment.add_css(load_resource('public/css/discussion_edit.css'))
+        log.info("submitted: {}".format(data))
+        self.display_name = data.get("display_name", "Untitled Discussion Topic")
+        self.discussion_category = data.get("discussion_category", None)
+        self.discussion_target = data.get("discussion_target", None)
+        return {"display_name": self.display_name, "discussion_category": self.discussion_category, "discussion_target": self.discussion_target}
 
-        # fragment.initialize_js('DiscussionEditXBlock')
-
+    def studio_view(self, context=None):
+        fragment = Fragment()
+        context = {
+            "display_name": self.display_name,
+            "discussion_category": self.discussion_category,
+            "discussion_target": self.discussion_target
+            }
+        log.info("rendering template in context: {}".format(context))
+        fragment.add_content(render_template('templates/html/discussion-studio.html', context))
+        fragment.initialize_js('DiscussionBlockEditor')
         return fragment
+
+    # TO-DO: change this to create the scenarios you'd like to see in the
+    # workbench while developing your XBlock.
+    @staticmethod
+    def workbench_scenarios():
+        """A canned scenario for display in the workbench."""
+        return [
+            ("Discussion XBlock",
+             """<vertical_demo>
+                <discussion-forum/>
+                </vertical_demo>
+             """),
+        ]
