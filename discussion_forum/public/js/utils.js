@@ -7,7 +7,8 @@
     }
     return $.fn.extend({
       loading: function(takeFocus) {
-        this.$_loading = $("<div class='loading-animation' tabindex='0'><span class='sr'>" + gettext("Loading content") + "</span></div>");
+       // TODO removed the "Loading Content" text span...
+        this.$_loading = $("<div class='loading-animation' tabindex='0'></div>");
         $(this).after(this.$_loading);
         if (takeFocus) {
           DiscussionUtil.makeFocusTrap(this.$_loading);

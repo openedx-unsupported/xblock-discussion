@@ -81,7 +81,10 @@
       DiscussionThreadInlineView.prototype.renderResponses = function() {
         var _this = this;
         return DiscussionUtil.safeAjax({
-          url: "/courses/" + $$course_id + "/discussion/forum/" + (this.model.get('commentable_id')) + "/threads/" + this.model.id,
+          // TODO not needed in the LMS... externally we get html instead of json
+          dataType: "json",
+          // TODO remove static url!!
+          url: '//lms.devstack.local'+"/courses/" + $$course_id + "/discussion/forum/" + (this.model.get('commentable_id')) + "/threads/" + this.model.id,
           $loading: this.$el,
           success: function(data, textStatus, xhr) {
             var comments;

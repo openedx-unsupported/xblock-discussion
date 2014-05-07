@@ -1,8 +1,11 @@
 @import 'variables';
 @import 'mixins';
+@import 'base';
 @import 'modal';
 @import 'typography';
+@import 'base.scss';
 
+/* TODO Remove this block... was for a courseware discussion page? */
 body.discussion {
 
   .new-post-form-errors {
@@ -499,7 +502,8 @@ body.discussion {
   }
 }
 
-.container .discussion-body {
+/* TODO there is no .container when not in the lms.. added .discussion-module here */
+.container .discussion-body, .discussion-module  {
   display: block;
   line-height: 1.4;
   background: transparent;
@@ -1813,8 +1817,14 @@ body.discussion {
   }
 
   .loading-animation {
-    background-image: url(../images/spinner-on-grey.gif);
-  }
+    background: no-repeat;
+    background-image: url(../images/spinner-on-grey.gif) ;
+    position: absolute;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-left: -10px;
+   }
 
   .discussion-show {
     position: relative;

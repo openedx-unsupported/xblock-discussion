@@ -14,7 +14,12 @@ from xblock.core import XBlock
 from xblock.fields import Scope, String, DateTime
 from xblock.fragment import Fragment
 
-from .utils import load_resource, render_template, render_mustache_templates
+from .utils import (
+    load_resource,
+    render_template,
+    render_mako_templates,
+    render_mustache_templates
+)
 
 
 # Globals ###########################################################
@@ -54,7 +59,7 @@ JS = [
 # Classes ###########################################################
 
 class DiscussionXBlock(XBlock):
-    discussion_id = String(scope=Scope.content, default=None)
+    discussion_id = String(scope=Scope.settings, default=None)
 
     display_name = String(
         display_name="Display Name",
@@ -98,10 +103,22 @@ class DiscussionXBlock(XBlock):
             'discussion_id': self.discussion_id
         }))
 
+        # TODO clean the resources... add a get_css()/get_javascript functions and loop...
         fragment.add_css_url(self.runtime.local_resource_url(
             self,
-            'public/css/discussions-inline.css'
+            'public/css/vendor/font-awesome.css'
         ))
+
+        fragment.add_css_url(self.runtime.local_resource_url(
+            self,
+            'public/css/discussion.css'
+        ))
+
+        # TODO Not use where this one was used yet...
+        # fragment.add_css_url(self.runtime.local_resource_url(
+        #     self,
+        #     'public/css/discussions-inline.css'
+        # ))
 
         fragment.add_javascript(render_template('public/js/discussion_block.js', {
             'course_id': self.course_id
@@ -109,6 +126,10 @@ class DiscussionXBlock(XBlock):
 
         fragment.add_content(render_mustache_templates(
             os.path.join(os.path.dirname(__file__) + '/templates/mustache')
+        ))
+
+        fragment.add_content(render_mako_templates(
+            os.path.join(os.path.dirname(__file__) + '/templates/html')
         ))
 
         fragment.add_javascript_url(
@@ -178,6 +199,8 @@ class DiscussionXBlock(XBlock):
     def studio_submit(self, data, suffix=''):  # pylint: disable=unused-argument
         """
         """
+
+        # TODO find a better solution..
         # TODO can studio do something like that without going to edit and save?
         # Set the discussion_id
         if self.discussion_id is None:
@@ -202,7 +225,7 @@ class DiscussionXBlock(XBlock):
         fragment.initialize_js('DiscussionBlockEditor')
         return fragment
 
-    # TO-DO: change this to create the scenarios you'd like to see in the
+    # TODO: change this to create the scenarios you'd like to see in the
     # workbench while developing your XBlock.
     @staticmethod
     def workbench_scenarios():

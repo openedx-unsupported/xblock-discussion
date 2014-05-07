@@ -48,6 +48,33 @@ def render_mustache_templates(mustache_dir):
         if is_valid_file_name(file_name)
     )
 
+def render_mako_templates(template_dir):
+    """
+    Render all template files in a directory and return the content. A file is considered a template
+    if it starts with '_' and ends with '.html'.
+    """
+
+    def is_valid_file_name(file_name):
+        return file_name.startswith('_') and file_name.endswith('.html')
+
+    def read_file(file_name):
+        return open(template_dir + '/' + file_name, "r").read().decode('utf-8')
+
+    def template_id_from_file_name(file_name):
+        return file_name.rpartition('.')[0]
+
+    def process_mako(template_content):
+        return MakoTemplate(template_content).render_unicode()
+
+    def make_script_tag(id, content):
+        return u"<script type='text/template' id='{0}'>{1}</script>".format(id, content)
+
+    return u'\n'.join(
+        make_script_tag(template_id_from_file_name(file_name), process_mako(read_file(file_name)))
+        for file_name in os.listdir(template_dir)
+        if is_valid_file_name(file_name)
+    )
+
 def get_scenarios_from_path(scenarios_path, include_identifier=False):
     """
     Returns an array of (title, xmlcontent) from files contained in a specified directory,
