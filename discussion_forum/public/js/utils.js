@@ -161,7 +161,9 @@
       params["url"] = URI(params["url"]).addSearch({
         ajax: 1
       });
-      params["beforeSend"] = function() {
+      // TODO Apply this change to coffescript file: I removed the beforeSend use. in conflict with
+      // jquery.xblock.
+      var beforeSend = function() {
         if ($elem) {
           $elem.attr("disabled", "disabled");
         }
@@ -178,6 +180,7 @@
           return _this.discussionAlert(gettext("Sorry"), gettext("We had some trouble processing your request. Please ensure you have copied any unsaved work and then reload the page."));
         };
       }
+      beforeSend();
       request = $.ajax(params).always(function() {
         if ($elem) {
           $elem.removeAttr("disabled");

@@ -151,13 +151,14 @@
           console.log("warning: elem for makeWmdEditor doesn't exist");
           return;
         }
+        // TODO I removed the Post body text here.
         if (!$elem.find(".wmd-panel").length) {
           initialText = $elem.html();
           $elem.empty();
           _append = appended_id || "";
           wmdInputId = "wmd-input" + _append;
           $wmdPreviewContainer = $("<div>").addClass("wmd-preview-container").append($("<div>").addClass("wmd-preview-label").text(gettext("Preview"))).append($("<div>").attr("id", "wmd-preview" + _append).addClass("wmd-panel wmd-preview"));
-          $wmdPanel = $("<div>").addClass("wmd-panel").append($("<div>").attr("id", "wmd-button-bar" + _append)).append($("<label>").addClass("sr").attr("for", wmdInputId).text(gettext("Post body"))).append($("<textarea>").addClass("wmd-input").attr("id", wmdInputId).html(initialText)).append($wmdPreviewContainer);
+          $wmdPanel = $("<div>").addClass("wmd-panel").append($("<div>").attr("id", "wmd-button-bar" + _append)).append($("<label>").addClass("sr").attr("for", wmdInputId)).append($("<textarea>").addClass("wmd-input").attr("id", wmdInputId).html(initialText)).append($wmdPreviewContainer);
           $elem.append($wmdPanel);
         }
         converter = Markdown.getMathCompatibleConverter(postProcessor);
