@@ -17,8 +17,9 @@ function DiscussionBlock(runtime, element) {
   });
 }
 
-function DiscussionBlockEditor(runtime, element) {
-    $('.xblock-save-button').bind('click', function() {
+// TODO move studio stuff to its own file
+function DiscussionEditBlock(runtime, element) {
+    $('.save-button').bind('click', function() {
         var data = {
             'display_name': $('#display-name').val(),
             'discussion_category': $('#discussion-category').val(),
@@ -28,5 +29,9 @@ function DiscussionBlockEditor(runtime, element) {
         $.post(handlerUrl, JSON.stringify(data)).complete(function() {
             window.location.reload(false);
         });
+    });
+
+    $('.cancel-button').bind('click', function() {
+        runtime.notify('cancel', {});
     });
 }

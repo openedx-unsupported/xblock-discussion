@@ -221,8 +221,8 @@ class DiscussionXBlock(XBlock):
             "discussion_target": self.discussion_target
             }
         log.info("rendering template in context: {}".format(context))
-        fragment.add_content(render_template('templates/html/discussion-studio.html', context))
-        fragment.initialize_js('DiscussionBlockEditor')
+        fragment.add_content(render_template('templates/html/discussion_edit.html', context))
+        fragment.initialize_js('DiscussionEditBlock')
         return fragment
 
     # TODO: change this to create the scenarios you'd like to see in the

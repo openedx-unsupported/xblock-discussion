@@ -1,5 +1,6 @@
-<div class="wrapper-comp-settings is-active" id="settings-tab">
-  <script id="metadata-editor-tpl" type="text/template">// JS crashes when empty //</script>
+{% load i18n %}
+
+<div id="discussion-edit" class="wrapper-comp-settings is-active editor-with-buttons" id="settings-tab">
   <ul class="list-input settings-list">
       <li class="field comp-setting-entry is-set">
           <div class="wrapper-comp-setting">
@@ -23,7 +24,16 @@
           <span class="tip setting-help">Discussion Target</span>
       </li>
   </ul>
-</div>
-<div class="row module-actions">
-    <a href="#" class="xblock-save-button action-primary action">Save</a>
+  <div class="xblock-actions">
+    <span class="xblock-editor-error-message"></span>
+    <ul>
+      <li class="action-item">
+        <a href="#" class="button action-primary save-button">{% trans "Save" %}</a>
+      </li>
+
+      <li class="action-item">
+        <a href="#" class="button cancel-button">{% trans "Cancel" %}</a>
+      </li>
+    </ul>
+  </div>
 </div>
