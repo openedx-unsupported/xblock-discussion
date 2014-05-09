@@ -27,6 +27,12 @@
 
     DiscussionUtil.wmdEditors = {};
 
+    // TODO: port this new function in coffeescript.
+    DiscussionUtil.baseUrl = '';
+    DiscussionUtil.setBaseUrl = function(baseUrl) {
+      this.baseUrl = baseUrl;
+    };
+
     DiscussionUtil.getTemplate = function(id) {
       return $("script#" + id).html();
     };
@@ -73,6 +79,7 @@
     };
 
     DiscussionUtil.urlFor = function(name, param, param1, param2) {
+      // TODO port to coffescript: modified for baseUrl
       var urls = {
         follow_discussion: "/courses/" + $$course_id + "/discussion/" + param + "/follow",
         unfollow_discussion: "/courses/" + $$course_id + "/discussion/" + param + "/unfollow",
@@ -112,8 +119,7 @@
         "disable_notifications": "/notification_prefs/disable/",
         "notifications_status": "/notification_prefs/status/"
       };
-      // TODO HACK for testing...
-      return 'http://lms.devstack.local'+urls[name];
+      return this.baseUrl+urls[name];
     };
 
     DiscussionUtil.activateOnSpace = function(event, func) {

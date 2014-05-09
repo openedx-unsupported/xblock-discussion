@@ -96,8 +96,8 @@
       DiscussionThreadProfileView.prototype.renderResponses = function() {
         var _this = this;
         return DiscussionUtil.safeAjax({
-          // TODO remove static url!!
-          url: '//lms.devstack.local'+"/courses/" + $$course_id + "/discussion/forum/" + (this.model.get('commentable_id')) + "/threads/" + this.model.id,
+          // TODO port to coffeescript!
+          url: DiscussionUtil.urlFor('threads') +"/" + (this.model.get('commentable_id')) + "/threads/" + this.model.id,
           $loading: this.$el,
           success: function(data, textStatus, xhr) {
             var comments;
