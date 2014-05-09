@@ -1,4 +1,4 @@
- var $$course_id = 'UniversityAB/AB101/2014_05';//"{{course_id}";
+ var $$course_id = "{{course_id}}";
 
 function DiscussionBlock(runtime, element) {
   var el = $(element).find('.discussion-module');
