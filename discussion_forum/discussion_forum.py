@@ -221,6 +221,11 @@ class DiscussionXBlock(XBlock):
             }
         log.info("rendering template in context: {}".format(context))
         fragment.add_content(render_template('templates/html/discussion_edit.html', context))
+        fragment.add_javascript_url(self.runtime.local_resource_url(
+            self,
+            'public/js/discussion_edit.js'
+        ))
+
         fragment.initialize_js('DiscussionEditBlock')
         return fragment
 
