@@ -1,4 +1,4 @@
-STATIC_SCSS =	common/static/sass/bourbon
+PUBLIC_CSS =	lms/static/sass/discussion-app.css
 
 PUBLIC_CSS_VENDOR =	common/static/css/vendor/font-awesome.css
 
@@ -38,25 +38,31 @@ PUBLIC_JS =	common/static/coffee/src/discussion/content.js \
 		common/static/coffee/src/discussion/views \
 		common/static/coffee/src/discussion/discussion.js \
 		common/static/coffee/src/discussion/discussion_router.js \
-		common/static/coffee/src/discussion/models
+		common/static/coffee/src/discussion/models \
+		common/static/coffee/src/discussion/utils.js \
+		common/static/coffee/src/discussion/tooltip_manager.js
 
-TEMPLATES_HTML =	lms/templates/discussion/_filter_dropdown.html
+
+TEMPLATES_HTML =	lms/templates/discussion/_underscore_templates.html \
+			lms/templates/discussion/_filter_dropdown.html
 
 TEMPLATES_MUSTACHE =	lms/templates/discussion/mustache/_inline_discussion_cohorted.mustache \
 			lms/templates/discussion/mustache/_inline_thread_show.mustache \
+			lms/templates/discussion/mustache/_inline_thread.mustache \
+			lms/templates/discussion/mustache/_inline_thread_cohorted.mustache \
 			lms/templates/discussion/mustache/_profile_thread.mustache \
 			lms/templates/discussion/mustache/_inline_discussion.mustache \
 			lms/templates/discussion/mustache/_pagination.mustache \
 			lms/templates/discussion/mustache/_user_profile.mustache
 
-.PHONY: $(STATIC_SCSS) $(PUBLIC_CSS_VENDOR) $(PUBLIC_FONTS_VENDOR) $(PUBLIC_IMAGES) \
+.PHONY: $(PUBLIC_CSS) $(PUBLIC_CSS_VENDOR) $(PUBLIC_FONTS_VENDOR) $(PUBLIC_IMAGES) \
 	$(PUBLIC_JS_VENDOR) $(PUBLIC_JS) $(TEMPLATES_HTML) $(TEMPLATES_MUSTACHE) fix_deps
 
-all:	$(STATIC_SCSS) $(PUBLIC_CSS_VENDOR) $(PUBLIC_FONTS_VENDOR) $(PUBLIC_IMAGES) \
+all:	$(PUBLIC_CSS) $(PUBLIC_CSS_VENDOR) $(PUBLIC_FONTS_VENDOR) $(PUBLIC_IMAGES) \
 	$(PUBLIC_JS_VENDOR) $(PUBLIC_JS) $(TEMPLATES_HTML) $(TEMPLATES_MUSTACHE) fix_deps
 
-$(STATIC_SCSS):
-	cp -r ${EDX}/$@ discussion_forum/static/scss
+$(PUBLIC_CSS):
+	cp ${EDX}/$@ discussion_forum/public/css
 
 $(PUBLIC_CSS_VENDOR):
 	cp ${EDX}/$@ discussion_forum/public/css/vendor

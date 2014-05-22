@@ -28,6 +28,7 @@ log = logging.getLogger(__name__)
 
 # temporary, really...
 JS = [
+'public/js/tooltip_manager.js',
 'public/js/models/discussion_user.js',
 'public/js/content.js',
 'public/js/discussion.js',
@@ -110,7 +111,7 @@ class DiscussionXBlock(XBlock):
 
         fragment.add_css_url(self.runtime.local_resource_url(
             self,
-            'public/css/discussion.css'
+            'public/css/discussion-app.css'
         ))
 
         # TODO Not use where this one was used yet...
