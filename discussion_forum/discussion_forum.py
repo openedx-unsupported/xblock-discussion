@@ -141,15 +141,15 @@ class DiscussionXBlock(XBlock):
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/URI-min.js')
+            self.runtime.local_resource_url(self, 'public/js/vendor/URI.min.js')
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/jquery-leanModal-min.js')
+            self.runtime.local_resource_url(self, 'public/js/vendor/jquery.leanModal.min.js')
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/jquery-timeago.js')
+            self.runtime.local_resource_url(self, 'public/js/vendor/jquery.timeago.js')
         )
 
         fragment.add_javascript_url(
@@ -165,19 +165,19 @@ class DiscussionXBlock(XBlock):
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/mathjax-MathJax-c9db6ac/MathJax.js'
+            self.runtime.local_resource_url(self, 'public/js/vendor/mathjax-MathJax-c9db6ac/MathJax.js?config=default'
         ))
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/Markdown-Converter.js'
+            self.runtime.local_resource_url(self, 'public/js/vendor/Markdown.Converter.js'
         ))
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/Markdown-Sanitizer.js'
+            self.runtime.local_resource_url(self, 'public/js/vendor/Markdown.Sanitizer.js'
         ))
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/Markdown-Editor.js'
+            self.runtime.local_resource_url(self, 'public/js/vendor/Markdown.Editor.js'
         ))
 
         fragment.add_javascript_url(

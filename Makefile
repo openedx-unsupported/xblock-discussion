@@ -77,7 +77,7 @@ $(PUBLIC_JS_VENDOR):
 	cp -r ${EDX}/$@ discussion_forum/public/js/vendor
 
 $(PUBLIC_JS):
-	cp -rn ${EDX}/$@ discussion_forum/public/js
+	cp -r ${EDX}/$@ discussion_forum/public/js
 
 $(TEMPLATES_HTML):
 	cp -r ${EDX}/$@ discussion_forum/templates/html
