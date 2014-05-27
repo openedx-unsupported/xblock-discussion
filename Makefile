@@ -78,25 +78,22 @@ all:	$(STATIC_CSS) $(STATIC_CSS_VENDOR) $(STATIC_FONTS_VENDOR) $(STATIC_IMAGES) 
 	$(TEMPLATES_DISCUSSION_DISABLED_HTML) $(TEMPLATES_DISCUSSION_HTML) $(TESTS) fix_deps
 
 $(STATIC_CSS):
-	cp ${EDX}/$@ discussion_app/static/css
+	cp ${EDX}/$@ discussion_app/static/discussion/css
 
 $(STATIC_CSS_VENDOR):
-	cp ${EDX}/$@ discussion_app/static/css/vendor
+	cp ${EDX}/$@ discussion_app/static/discussion/css/vendor
 
 $(STATIC_FONTS_VENDOR):
-	cp ${EDX}/$@ discussion_app/static/fonts/vendor
+	cp ${EDX}/$@ discussion_app/static/discussion/fonts/vendor
 
 $(STATIC_IMAGES):
-	cp ${EDX}/$@ discussion_app/static/images
+	cp ${EDX}/$@ discussion_app/static/discussion/images
 
 $(STATIC_JS_VENDOR):
-	cp -r ${EDX}/$@ discussion_app/static/js/vendor
+	cp -r ${EDX}/$@ discussion_app/static/discussion/js/vendor
 
 $(STATIC_DISCUSSION_JS):
-	cp -r ${EDX}/$@ discussion_app/static/js/discussion
-
-$(STATIC_JS):
-	cp -r ${EDX}/$@ discussion_app/static/js
+	cp -r ${EDX}/$@ discussion_app/static/discussion/js
 
 $(TEMPLATES_HTML):
 	cp -r ${EDX}/$@ discussion_app/templates

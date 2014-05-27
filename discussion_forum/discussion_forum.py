@@ -20,41 +20,11 @@ from .utils import (
     render_mako_templates
 )
 
-from discussion_app.views import render_mustache_templates
+from discussion_app.views import get_js_urls, get_css_urls, render_mustache_templates
 
 # Globals ###########################################################
 
 log = logging.getLogger(__name__)
-
-# temporary, really...
-JS = [
-'static/js/discussion/tooltip_manager.js',
-'static/js/discussion/models/discussion_user.js',
-'static/js/discussion/content.js',
-'static/js/discussion/discussion.js',
-'static/js/discussion/main.js',
-'static/js/discussion/discussion_filter.js',
-'static/js/discussion/views/discussion_content_view.js',
-'static/js/discussion/views/response_comment_view.js',
-'static/js/discussion/views/thread_response_show_view.js',
-'static/js/discussion/views/discussion_user_profile_view.js',
-'static/js/discussion/views/new_post_inline_vew.js',
-'static/js/discussion/views/thread_response_edit_view.js',
-'static/js/discussion/views/discussion_thread_view.js',
-'static/js/discussion/views/discussion_thread_view_inline.js',
-'static/js/discussion/views/thread_response_view.js',
-'static/js/discussion/views/discussion_thread_list_view.js',
-'static/js/discussion/views/discussion_thread_show_view.js',
-'static/js/discussion/views/discussion_thread_edit_view.js',
-'static/js/discussion/views/response_comment_show_view.js',
-'static/js/discussion/views/discussion_thread_profile_view.js',
-'static/js/discussion/views/new_post_view.js',
-'static/js/discussion/views/response_comment_edit_view.js',
-'static/js/discussion/discussion_router.js',
-'static/js/discussion/utils.js',
-'static/js/discussion/templates.js',
-'static/js/discussion/discussion_module_view.js'
-]
 
 # Classes ###########################################################
 
@@ -99,7 +69,7 @@ class DiscussionXBlock(XBlock):
     def student_view(self, context=None):
         fragment = Fragment()
 
-        # TODO Where should we take those permission values?
+        # TODO Where should we read those permission values?
         fragment.add_content(render_template('templates/discussion.html', {
             'discussion_id': self.discussion_id,
             'has_permission_to_create_thread': True,
@@ -108,24 +78,7 @@ class DiscussionXBlock(XBlock):
             'has_permission_to_create_subcomment': True,
         }))
 
-        # TODO clean the resources... add a get_css()/get_javascript functions and loop...
-        fragment.add_css_url(self.runtime.local_resource_url(
-            self,
-            'static/css/vendor/font-awesome.css'
-        ))
-
-        fragment.add_css_url(self.runtime.local_resource_url(
-            self,
-            'static/css/discussion-app.css'
-        ))
-
-        # TODO Not use where this one was used yet...
-        # fragment.add_css_url(self.runtime.local_resource_url(
-        #     self,
-        #     'public/css/discussions-inline.css'
-        # ))
-
-        fragment.add_javascript(render_template('static/js/discussion_block.js', {
+        fragment.add_javascript(render_template('static/discussion/js/discussion_block.js', {
             'course_id': self.course_id
         }))
 
@@ -133,64 +86,11 @@ class DiscussionXBlock(XBlock):
 
         fragment.add_content(render_mako_templates())
 
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/split.js')
-        )
+        for url in get_js_urls():
+            fragment.add_javascript_url(url)
 
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/i18n.js')
-        )
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/URI.min.js')
-        )
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/jquery.leanModal.min.js')
-        )
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/jquery.timeago.js')
-        )
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/underscore-min.js')
-        )
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/backbone-min.js')
-        )
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/mustache.js')
-        )
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/mathjax-MathJax-c9db6ac/MathJax.js?config=default'
-        ))
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/Markdown.Converter.js'
-        ))
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/Markdown.Sanitizer.js'
-        ))
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/Markdown.Editor.js'
-        ))
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/mathjax_delay_renderer.js'
-        ))
-
-        fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'static/js/vendor/customwmd.js'
-        ))
-
-        for js in JS:
-            fragment.add_javascript_url(self.runtime.local_resource_url(self, js))
+        for url in get_css_urls():
+            fragment.add_css_url(url)
 
         fragment.initialize_js('DiscussionBlock')
 
@@ -225,7 +125,7 @@ class DiscussionXBlock(XBlock):
         fragment.add_content(render_template('templates/html/discussion_edit.html', context))
         fragment.add_javascript_url(self.runtime.local_resource_url(
             self,
-            'static/js/discussion_edit.js'
+            'static/discussion/js/discussion_edit.js'
         ))
 
         fragment.initialize_js('DiscussionEditBlock')
