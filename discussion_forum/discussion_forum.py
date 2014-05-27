@@ -28,32 +28,32 @@ log = logging.getLogger(__name__)
 
 # temporary, really...
 JS = [
-'public/js/tooltip_manager.js',
-'public/js/models/discussion_user.js',
-'public/js/content.js',
-'public/js/discussion.js',
-'public/js/main.js',
-'public/js/discussion_filter.js',
-'public/js/views/discussion_content_view.js',
-'public/js/views/response_comment_view.js',
-'public/js/views/thread_response_show_view.js',
-'public/js/views/discussion_user_profile_view.js',
-'public/js/views/new_post_inline_vew.js',
-'public/js/views/thread_response_edit_view.js',
-'public/js/views/discussion_thread_view.js',
-'public/js/views/discussion_thread_view_inline.js',
-'public/js/views/thread_response_view.js',
-'public/js/views/discussion_thread_list_view.js',
-'public/js/views/discussion_thread_show_view.js',
-'public/js/views/discussion_thread_edit_view.js',
-'public/js/views/response_comment_show_view.js',
-'public/js/views/discussion_thread_profile_view.js',
-'public/js/views/new_post_view.js',
-'public/js/views/response_comment_edit_view.js',
-'public/js/discussion_router.js',
-'public/js/utils.js',
-'public/js/templates.js',
-'public/js/discussion_module_view.js'
+'static/js/discussion/tooltip_manager.js',
+'static/js/discussion/models/discussion_user.js',
+'static/js/discussion/content.js',
+'static/js/discussion/discussion.js',
+'static/js/discussion/main.js',
+'static/js/discussion/discussion_filter.js',
+'static/js/discussion/views/discussion_content_view.js',
+'static/js/discussion/views/response_comment_view.js',
+'static/js/discussion/views/thread_response_show_view.js',
+'static/js/discussion/views/discussion_user_profile_view.js',
+'static/js/discussion/views/new_post_inline_vew.js',
+'static/js/discussion/views/thread_response_edit_view.js',
+'static/js/discussion/views/discussion_thread_view.js',
+'static/js/discussion/views/discussion_thread_view_inline.js',
+'static/js/discussion/views/thread_response_view.js',
+'static/js/discussion/views/discussion_thread_list_view.js',
+'static/js/discussion/views/discussion_thread_show_view.js',
+'static/js/discussion/views/discussion_thread_edit_view.js',
+'static/js/discussion/views/response_comment_show_view.js',
+'static/js/discussion/views/discussion_thread_profile_view.js',
+'static/js/discussion/views/new_post_view.js',
+'static/js/discussion/views/response_comment_edit_view.js',
+'static/js/discussion/discussion_router.js',
+'static/js/discussion/utils.js',
+'static/js/discussion/templates.js',
+'static/js/discussion/discussion_module_view.js'
 ]
 
 # Classes ###########################################################
@@ -99,19 +99,19 @@ class DiscussionXBlock(XBlock):
     def student_view(self, context=None):
         fragment = Fragment()
 
-        fragment.add_content(render_template('templates/html/discussion.html', {
+        fragment.add_content(render_template('templates/discussion.html', {
             'discussion_id': self.discussion_id
         }))
 
         # TODO clean the resources... add a get_css()/get_javascript functions and loop...
         fragment.add_css_url(self.runtime.local_resource_url(
             self,
-            'public/css/vendor/font-awesome.css'
+            'static/css/vendor/font-awesome.css'
         ))
 
         fragment.add_css_url(self.runtime.local_resource_url(
             self,
-            'public/css/discussion-app.css'
+            'static/css/discussion-app.css'
         ))
 
         # TODO Not use where this one was used yet...
@@ -120,72 +120,68 @@ class DiscussionXBlock(XBlock):
         #     'public/css/discussions-inline.css'
         # ))
 
-        fragment.add_javascript(render_template('public/js/discussion_block.js', {
+        fragment.add_javascript(render_template('static/js/discussion_block.js', {
             'course_id': self.course_id
         }))
 
-        fragment.add_content(render_mustache_templates(
-            os.path.join(os.path.dirname(__file__) + '/templates/mustache')
-        ))
+        fragment.add_content(render_mustache_templates())
 
-        fragment.add_content(render_mako_templates(
-            os.path.join(os.path.dirname(__file__) + '/templates/html')
-        ))
+        fragment.add_content(render_mako_templates())
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/split.js')
+            self.runtime.local_resource_url(self, 'static/js/vendor/split.js')
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/i18n.js')
+            self.runtime.local_resource_url(self, 'static/js/vendor/i18n.js')
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/URI.min.js')
+            self.runtime.local_resource_url(self, 'static/js/vendor/URI.min.js')
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/jquery.leanModal.min.js')
+            self.runtime.local_resource_url(self, 'static/js/vendor/jquery.leanModal.min.js')
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/jquery.timeago.js')
+            self.runtime.local_resource_url(self, 'static/js/vendor/jquery.timeago.js')
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/underscore-min.js')
+            self.runtime.local_resource_url(self, 'static/js/vendor/underscore-min.js')
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/backbone-min.js')
+            self.runtime.local_resource_url(self, 'static/js/vendor/backbone-min.js')
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/mustache.js')
+            self.runtime.local_resource_url(self, 'static/js/vendor/mustache.js')
         )
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/mathjax-MathJax-c9db6ac/MathJax.js?config=default'
+            self.runtime.local_resource_url(self, 'static/js/vendor/mathjax-MathJax-c9db6ac/MathJax.js?config=default'
         ))
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/Markdown.Converter.js'
+            self.runtime.local_resource_url(self, 'static/js/vendor/Markdown.Converter.js'
         ))
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/Markdown.Sanitizer.js'
+            self.runtime.local_resource_url(self, 'static/js/vendor/Markdown.Sanitizer.js'
         ))
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/Markdown.Editor.js'
+            self.runtime.local_resource_url(self, 'static/js/vendor/Markdown.Editor.js'
         ))
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/mathjax_delay_renderer.js'
+            self.runtime.local_resource_url(self, 'static/js/vendor/mathjax_delay_renderer.js'
         ))
 
         fragment.add_javascript_url(
-            self.runtime.local_resource_url(self, 'public/js/vendor/customwmd.js'
+            self.runtime.local_resource_url(self, 'static/js/vendor/customwmd.js'
         ))
 
         for js in JS:
@@ -224,7 +220,7 @@ class DiscussionXBlock(XBlock):
         fragment.add_content(render_template('templates/html/discussion_edit.html', context))
         fragment.add_javascript_url(self.runtime.local_resource_url(
             self,
-            'public/js/discussion_edit.js'
+            'static/js/discussion_edit.js'
         ))
 
         fragment.initialize_js('DiscussionEditBlock')

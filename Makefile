@@ -28,7 +28,8 @@ STATIC_JS_VENDOR =	common/static/js/vendor/mathjax-MathJax-c9db6ac \
 			common/static/js/vendor/URI.min.js \
 			common/static/js/test/i18n.js \
 			lms/static/coffee/src/mathjax_delay_renderer.js \
-			lms/static/js/split.js
+			lms/static/js/split.js \
+			lms/static/coffee/src/customwmd.js
 
 STATIC_DISCUSSION_JS =	common/static/coffee/src/discussion/content.js \
 		common/static/coffee/src/discussion/discussion_filter.js \
@@ -44,7 +45,8 @@ STATIC_DISCUSSION_JS =	common/static/coffee/src/discussion/content.js \
 
 TEMPLATES_DISCUSSION_HTML =	lms/templates/discussion/_underscore_templates.html \
 				lms/templates/discussion/_filter_dropdown.html \
-				lms/templates/discussion/mustache
+				lms/templates/discussion/mustache \
+				lms/templates/discussion/_thread_list_template.html
 
 TEMPLATES_DISCUSSION_DISABLED_HTML =	lms/templates/discussion/_blank_slate.html \
 					lms/templates/discussion/_discussion_course_navigation.html \
@@ -60,7 +62,6 @@ TEMPLATES_DISCUSSION_DISABLED_HTML =	lms/templates/discussion/_blank_slate.html 
 					lms/templates/discussion/_search_bar.html \
 					lms/templates/discussion/_similar_posts.html \
 					lms/templates/discussion/_sort.html \
-					lms/templates/discussion/_thread_list_template.html \
 					lms/templates/discussion/_user_profile.html \
 					lms/templates/discussion/index.html \
 					lms/templates/discussion/maintenance.html \

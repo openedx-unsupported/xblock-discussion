@@ -14,7 +14,7 @@ def load_resource(resource_path):
     """
     Gets the content of a resource
     """
-    resource_content = pkg_resources.resource_string(__name__, resource_path)
+    resource_content = pkg_resources.resource_string('discussion_app', resource_path)
     return unicode(resource_content)
 
 def render_template(template_path, context={}):
@@ -25,7 +25,9 @@ def render_template(template_path, context={}):
     template = Template(template_str)
     return template.render(Context(context))
 
-def render_mustache_templates(mustache_dir):
+def render_mustache_templates():
+
+    mustache_dir = pkg_resources.resource_filename('discussion_app', 'templates/discussion/mustache')
 
     def is_valid_file_name(file_name):
         return file_name.endswith('.mustache')
@@ -48,11 +50,13 @@ def render_mustache_templates(mustache_dir):
         if is_valid_file_name(file_name)
     )
 
-def render_mako_templates(template_dir):
+def render_mako_templates():
     """
     Render all template files in a directory and return the content. A file is considered a template
     if it starts with '_' and ends with '.html'.
     """
+
+    template_dir = pkg_resources.resource_filename('discussion_app', 'templates/discussion')
 
     def is_valid_file_name(file_name):
         return file_name.startswith('_') and file_name.endswith('.html')
