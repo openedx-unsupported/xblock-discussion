@@ -99,8 +99,13 @@ class DiscussionXBlock(XBlock):
     def student_view(self, context=None):
         fragment = Fragment()
 
+        # TODO Where should we take those permission values?
         fragment.add_content(render_template('templates/discussion.html', {
-            'discussion_id': self.discussion_id
+            'discussion_id': self.discussion_id,
+            'has_permission_to_create_thread': True,
+            'has_permission_to_create_comment': True,
+            'has_permission_to_openclose_thread': True,
+            'has_permission_to_create_subcomment': True,
         }))
 
         # TODO clean the resources... add a get_css()/get_javascript functions and loop...
