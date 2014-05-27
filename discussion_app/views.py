@@ -1,0 +1,125 @@
+import os
+import pkg_resources
+
+from mako.template import Template as MakoTemplate
+from mako.lookup import TemplateLookup
+
+from django.template import Context, loader
+from django.http import HttpResponse
+
+# this gets consumed in edx-platform/lms/envs/common.py to push static resources
+STATIC_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static')
+TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
+_template_lookup = TemplateLookup(TEMPLATE_DIR)
+
+JS_PATH = os.path.join(STATIC_DIR, 'discussion/js')
+
+
+from django.templatetags.static import static
+
+# dummy, for testing as a standalone app.
+def index(request):
+    t = loader.get_template('index.html')
+    c = Context({})
+    return HttpResponse(t.render(c))
+
+# dummy, for testing as a standalone app against a mock server API.
+def inline_test(request):
+    js_test_deps = '<script type="text/javascript" src="{}"></script>'.format(static('js/vendor/jquery.min.js'))
+
+
+    return HttpResponse(u"""
+    <html>
+    <head>
+        <title>Inline Test</title>
+    {js_test_deps}
+    {css_links}
+    {js_links}
+    </head>
+    <body>
+    {body}
+    {js_body}
+    </body>
+    </html>
+    """.format(
+        js_test_deps=js_test_deps,
+        css_links=get_css_links(),
+        js_links=get_js_links(),
+        body=get_inline_body(discussion_id="foo"),
+        js_body=get_js_body()
+        )
+    )
+
+def get_inline_body(discussion_id):
+    t = _template_lookup.get_template('discussion/_discussion_module.html')
+    return t.render_unicode(discussion_id=discussion_id)
+
+def get_css_urls():
+    return [static('discussion/css/discussion.css')]
+
+def get_css_links():
+    return os.linesep.join('<link rel="stylesheet" type="text/css" href="{}"/>'.format(url) for url in self.get_css_urls())
+
+VENDOR_JS_URLS = [
+    'discussion/js/vendor/split.js',
+    'discussion/js/vendor/i18n.js',
+    'discussion/js/vendor/URI-min.js',
+    'discussion/js/vendor/jquery-leanModal-min.js',
+    'discussion/js/vendor/jquery-timeago.js',
+    'discussion/js/vendor/underscore-min.js',
+    'discussion/js/vendor/backbone-min.js',
+    'discussion/js/vendor/mustache.js',
+    'discussion/js/vendor/mathjax-MathJax-c9db6ac/MathJax.js',
+    'discussion/js/vendor/Markdown-Converter.js',
+    'discussion/js/vendor/Markdown-Sanitizer.js',
+    'discussion/js/vendor/Markdown-Editor.js',
+    'discussion/js/vendor/mathjax_delay_renderer.js',
+    'discussion/js/vendor/customwmd.js'
+]
+
+def get_js_urls():
+    return [static(path) for path in VENDOR_JS_URLS]
+
+def get_js_filenames():
+    return [pkg_resources.resource_filename('discussion', path) for path in VENDOR_JS_URLS]
+
+def get_js_links():
+    return os.linesep.join('<script type="text/javascript" src="{}"/>'.format(url) for url in self.get_js_urls())
+
+def get_js_body():
+    js_dir = os.path.join(STATIC_DIR, 'discussion/js')
+    js_urls = []
+    for root, dirs, filenames in os.walk(js_dir):
+        prefix = root[len(STATIC_DIR)+1:]
+        for filename in filenames:
+            if filename.endswith('.js'):
+                path = os.path.join(prefix, filename)
+                print [root, prefix, filename, path]
+                js_urls.append(static(path))
+    tags = os.linesep.join('<script type="text/javascript" src="{}"></script>'.format(url) for url in js_urls)
+    return tags + os.linesep + render_mustache_templates()
+
+def render_mustache_templates():
+
+    mustache_dir = os.path.join(TEMPLATE_DIR, 'discussion/mustache')
+
+    def is_valid_file_name(file_name):
+        return file_name.endswith('.mustache')
+
+    def read_file(file_name):
+        return open(mustache_dir + '/' + file_name, "r").read().decode('utf-8')
+
+    def template_id_from_file_name(file_name):
+        return file_name.rpartition('.')[0]
+
+    def process_mako(template_content):
+        return MakoTemplate(template_content).render_unicode()
+
+    def make_script_tag(id, content):
+        return u"<script type='text/template' id='{0}'>{1}</script>".format(id, content)
+
+    return u'\n'.join(
+        make_script_tag(template_id_from_file_name(file_name), process_mako(read_file(file_name)))
+        for file_name in os.listdir(mustache_dir)
+        if is_valid_file_name(file_name)
+    )
