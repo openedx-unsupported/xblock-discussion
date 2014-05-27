@@ -1,13 +1,13 @@
-PUBLIC_CSS =	lms/static/sass/discussion-app.css
+STATIC_CSS =	lms/static/sass/discussion-app.css
 
-PUBLIC_CSS_VENDOR =	common/static/css/vendor/font-awesome.css
+STATIC_CSS_VENDOR =	common/static/css/vendor/font-awesome.css
 
-PUBLIC_FONTS_VENDOR =	common/static/fonts/vendor/fontawesome-webfont.eot \
+STATIC_FONTS_VENDOR =	common/static/fonts/vendor/fontawesome-webfont.eot \
 			common/static/fonts/vendor/fontawesome-webfont.svg \
 			common/static/fonts/vendor/fontawesome-webfont.ttf \
 			common/static/fonts/vendor/fontawesome-webfont.woff
 
-PUBLIC_IMAGES =	lms/static/images/follow-dog-ear.png \
+STATIC_IMAGES =	lms/static/images/follow-dog-ear.png \
 			lms/static/images/moderator-edit-icon.png \
 			lms/static/images/show-hide-discussion-icon.png \
 			lms/static/images/vote-plus-icon.png \
@@ -16,7 +16,7 @@ PUBLIC_IMAGES =	lms/static/images/follow-dog-ear.png \
 			common/static/images/spinner-on-grey.gif \
 			lms/static/images/wmd-buttons-transparent.png
 
-PUBLIC_JS_VENDOR =	common/static/js/vendor/mathjax-MathJax-c9db6ac \
+STATIC_JS_VENDOR =	common/static/js/vendor/mathjax-MathJax-c9db6ac \
 			lms/static/js/mustache.js \
 			common/static/js/vendor/backbone-min.js \
 			common/static/js/vendor/jquery.leanModal.min.js \
@@ -30,7 +30,7 @@ PUBLIC_JS_VENDOR =	common/static/js/vendor/mathjax-MathJax-c9db6ac \
 			lms/static/coffee/src/mathjax_delay_renderer.js \
 			lms/static/js/split.js
 
-PUBLIC_JS =	common/static/coffee/src/discussion/content.js \
+STATIC_DISCUSSION_JS =	common/static/coffee/src/discussion/content.js \
 		common/static/coffee/src/discussion/discussion_filter.js \
 		common/static/coffee/src/discussion/discussion_module_view.js \
 		common/static/coffee/src/discussion/main.js \
@@ -42,48 +42,72 @@ PUBLIC_JS =	common/static/coffee/src/discussion/content.js \
 		common/static/coffee/src/discussion/utils.js \
 		common/static/coffee/src/discussion/tooltip_manager.js
 
+TEMPLATES_DISCUSSION_HTML =	lms/templates/discussion/_underscore_templates.html \
+				lms/templates/discussion/_filter_dropdown.html \
+				lms/templates/discussion/mustache
 
-TEMPLATES_HTML =	lms/templates/discussion/_underscore_templates.html \
-			lms/templates/discussion/_filter_dropdown.html
+TEMPLATES_DISCUSSION_DISABLED_HTML =	lms/templates/discussion/_blank_slate.html \
+					lms/templates/discussion/_discussion_course_navigation.html \
+					lms/templates/discussion/_discussion_module.html \
+					lms/templates/discussion/_discussion_module_studio.html \
+					lms/templates/discussion/_inline_new_post.html \
+					lms/templates/discussion/_js_body_dependencies.html \
+					lms/templates/discussion/_js_data.html \
+					lms/templates/discussion/_js_head_dependencies.html \
+					lms/templates/discussion/_new_post.html \
+					lms/templates/discussion/_paginator.html \
+					lms/templates/discussion/_recent_active_posts.html \
+					lms/templates/discussion/_search_bar.html \
+					lms/templates/discussion/_similar_posts.html \
+					lms/templates/discussion/_sort.html \
+					lms/templates/discussion/_thread_list_template.html \
+					lms/templates/discussion/_user_profile.html \
+					lms/templates/discussion/index.html \
+					lms/templates/discussion/maintenance.html \
+					lms/templates/discussion/user_profile.html
 
-TEMPLATES_MUSTACHE =	lms/templates/discussion/mustache/_inline_discussion_cohorted.mustache \
-			lms/templates/discussion/mustache/_inline_thread_show.mustache \
-			lms/templates/discussion/mustache/_inline_thread.mustache \
-			lms/templates/discussion/mustache/_inline_thread_cohorted.mustache \
-			lms/templates/discussion/mustache/_profile_thread.mustache \
-			lms/templates/discussion/mustache/_inline_discussion.mustache \
-			lms/templates/discussion/mustache/_pagination.mustache \
-			lms/templates/discussion/mustache/_user_profile.mustache
+TESTS =	common/static/coffee/spec/discussion
 
-.PHONY: $(PUBLIC_CSS) $(PUBLIC_CSS_VENDOR) $(PUBLIC_FONTS_VENDOR) $(PUBLIC_IMAGES) \
-	$(PUBLIC_JS_VENDOR) $(PUBLIC_JS) $(TEMPLATES_HTML) $(TEMPLATES_MUSTACHE) fix_deps
+.PHONY: $(STATIC_CSS) $(STATIC_CSS_VENDOR) $(STATIC_FONTS_VENDOR) $(STATIC_IMAGES) \
+	$(STATIC_JS_VENDOR) $(STATIC_DISCUSSION_JS) $(TEMPLATES_HTML) \
+	$(TEMPLATES_DISCUSSION_DISABLED_HTML) $(TEMPLATES_DISCUSSION_HTML) $(TESTS) fix_deps
 
-all:	$(PUBLIC_CSS) $(PUBLIC_CSS_VENDOR) $(PUBLIC_FONTS_VENDOR) $(PUBLIC_IMAGES) \
-	$(PUBLIC_JS_VENDOR) $(PUBLIC_JS) $(TEMPLATES_HTML) $(TEMPLATES_MUSTACHE) fix_deps
+all:	$(STATIC_CSS) $(STATIC_CSS_VENDOR) $(STATIC_FONTS_VENDOR) $(STATIC_IMAGES) \
+	$(STATIC_JS_VENDOR) $(STATIC_DISCUSSION_JS) $(STATIC_DISCUSSION_JS) $(TEMPLATES_HTML) \
+	$(TEMPLATES_DISCUSSION_DISABLED_HTML) $(TEMPLATES_DISCUSSION_HTML) $(TESTS) fix_deps
 
-$(PUBLIC_CSS):
-	cp ${EDX}/$@ discussion_forum/public/css
+$(STATIC_CSS):
+	cp ${EDX}/$@ discussion_app/static/css
 
-$(PUBLIC_CSS_VENDOR):
-	cp ${EDX}/$@ discussion_forum/public/css/vendor
+$(STATIC_CSS_VENDOR):
+	cp ${EDX}/$@ discussion_app/static/css/vendor
 
-$(PUBLIC_FONTS_VENDOR):
-	cp ${EDX}/$@ discussion_forum/public/fonts/vendor
+$(STATIC_FONTS_VENDOR):
+	cp ${EDX}/$@ discussion_app/static/fonts/vendor
 
-$(PUBLIC_IMAGES):
-	cp ${EDX}/$@ discussion_forum/public/images
+$(STATIC_IMAGES):
+	cp ${EDX}/$@ discussion_app/static/images
 
-$(PUBLIC_JS_VENDOR):
-	cp -r ${EDX}/$@ discussion_forum/public/js/vendor
+$(STATIC_JS_VENDOR):
+	cp -r ${EDX}/$@ discussion_app/static/js/vendor
 
-$(PUBLIC_JS):
-	cp -r ${EDX}/$@ discussion_forum/public/js
+$(STATIC_DISCUSSION_JS):
+	cp -r ${EDX}/$@ discussion_app/static/js/discussion
+
+$(STATIC_JS):
+	cp -r ${EDX}/$@ discussion_app/static/js
 
 $(TEMPLATES_HTML):
-	cp -r ${EDX}/$@ discussion_forum/templates/html
+	cp -r ${EDX}/$@ discussion_app/templates
 
-$(TEMPLATES_MUSTACHE):
-	cp -r ${EDX}/$@ discussion_forum/templates/mustache
+$(TEMPLATES_DISCUSSION_HTML):
+	cp -r ${EDX}/$@ discussion_app/templates/discussion
+
+$(TEMPLATES_DISCUSSION_DISABLED_HTML):
+	cp -r ${EDX}/$@ discussion_app/templates/discussion/disabled
+
+$(TESTS):
+	cp -r ${EDX}/$@ discussion_app/tests/js
 
 fix_deps:
 	./fix_deps.sh
