@@ -21,6 +21,7 @@ setup(
     description='XBlock - Discussion Forum',
     packages=[
         'discussion_forum',
+        'discussion_app'
     ],
     install_requires=[
         'XBlock',
@@ -30,5 +31,5 @@ setup(
             'discussion-forum = discussion_forum:DiscussionXBlock',
         ]
     },
-    package_data=package_data("discussion_forum", ["public", "templates"]),
+    package_data=package_data("discussion_app", ["static", "templates"]),
 )
