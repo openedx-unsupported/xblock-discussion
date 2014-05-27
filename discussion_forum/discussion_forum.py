@@ -17,10 +17,10 @@ from xblock.fragment import Fragment
 from .utils import (
     load_resource,
     render_template,
-    render_mako_templates,
-    render_mustache_templates
+    render_mako_templates
 )
 
+from discussion_app.views import render_mustache_templates
 
 # Globals ###########################################################
 
