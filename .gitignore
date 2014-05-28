@@ -55,4 +55,5 @@ docs/_build/
 # virtualenv
 ENV/
 
-discussion_forum/static/scss/*.css
+# Node.JS (CoffeeScript)
+node_modules

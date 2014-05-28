@@ -4,6 +4,8 @@ Discussion XBlock
 Setup Intructions
 -----------------
 
+(OBSELETE DO NOT FOLLOW. The resources are now already included in the repo)
+
 Get dependencies from the LMS:
 
 ```bash
