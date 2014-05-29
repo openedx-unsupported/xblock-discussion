@@ -62,6 +62,9 @@ CSS_URLS = [
     'discussion/css/vendor/font-awesome.css'
 ]
 
+def get_template_dir():
+    return TEMPLATE_DIR
+
 def get_js_urls():
     return [static(path) for path in JS_URLS]
 
