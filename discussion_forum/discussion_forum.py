@@ -17,10 +17,11 @@ from xblock.fragment import Fragment
 from .utils import (
     load_resource,
     render_template,
-    render_mako_templates
+    render_mako_templates,
+    render_mustache_templates
 )
 
-from discussion_app.views import get_js_urls, get_css_urls, render_mustache_templates
+from discussion_app.views import get_js_urls, get_css_urls
 
 # Globals ###########################################################
 
@@ -122,11 +123,8 @@ class DiscussionXBlock(XBlock):
             "discussion_target": self.discussion_target
             }
         log.info("rendering template in context: {}".format(context))
-        fragment.add_content(render_template('templates/html/discussion_edit.html', context))
-        fragment.add_javascript_url(self.runtime.local_resource_url(
-            self,
-            'static/discussion/js/discussion_edit.js'
-        ))
+        fragment.add_content(render_template('templates/discussion_edit.html', context))
+        fragment.add_javascript(load_resource('static/discussion/js/discussion_edit.js'))
 
         fragment.initialize_js('DiscussionEditBlock')
         return fragment

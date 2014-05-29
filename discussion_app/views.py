@@ -7,15 +7,9 @@ from mako.lookup import TemplateLookup
 from django.template import Context, loader
 from django.http import HttpResponse
 
-# this gets consumed in edx-platform/lms/envs/common.py to push static resources
-STATIC_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static')
-TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
-_template_lookup = TemplateLookup(TEMPLATE_DIR)
-
-JS_PATH = os.path.join(STATIC_DIR, 'discussion/js')
-
-
 from django.templatetags.static import static
+
+TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
 
 JS_URLS = [
     # VENDOR
@@ -68,7 +62,16 @@ CSS_URLS = [
     'discussion/css/vendor/font-awesome.css'
 ]
 
-# dummy, for testing as a standalone app.
+def get_js_urls():
+    return [static(path) for path in JS_URLS]
+
+def get_css_urls():
+    return [static(path) for path in CSS_URLS]
+
+# TODO Remove the all following lines, was used for testing as a standalone app.
+STATIC_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static')
+_template_lookup = TemplateLookup(TEMPLATE_DIR)
+
 def index(request):
     t = loader.get_template('index.html')
     c = Context({})
@@ -105,14 +108,8 @@ def get_inline_body(discussion_id):
     t = _template_lookup.get_template('discussion/_discussion_module.html')
     return t.render_unicode(discussion_id=discussion_id)
 
-def get_css_urls():
-    return [static(path) for path in CSS_URLS]
-
 def get_css_links():
     return os.linesep.join('<link rel="stylesheet" type="text/css" href="{}"/>'.format(url) for url in self.get_css_urls())
-
-def get_js_urls():
-    return [static(path) for path in JS_URLS]
 
 def get_js_filenames():
     return [pkg_resources.resource_filename('discussion', path) for path in VENDOR_JS_URLS]
@@ -124,36 +121,12 @@ def get_js_body():
     js_dir = os.path.join(STATIC_DIR, 'discussion/js')
     js_urls = []
     for root, dirs, filenames in os.walk(js_dir):
-        prefix = root[len(STATIC_DIR)+1:]
+        prefix = root[len(STATIC_DIR+1):]
         for filename in filenames:
             if filename.endswith('.js'):
                 path = os.path.join(prefix, filename)
                 print [root, prefix, filename, path]
                 js_urls.append(static(path))
     tags = os.linesep.join('<script type="text/javascript" src="{}"></script>'.format(url) for url in js_urls)
+    # moved to discussion_forum... will be deleted anyway
     return tags + os.linesep + render_mustache_templates()
-
-def render_mustache_templates():
-
-    mustache_dir = os.path.join(TEMPLATE_DIR, 'discussion/mustache')
-
-    def is_valid_file_name(file_name):
-        return file_name.endswith('.mustache')
-
-    def read_file(file_name):
-        return open(mustache_dir + '/' + file_name, "r").read().decode('utf-8')
-
-    def template_id_from_file_name(file_name):
-        return file_name.rpartition('.')[0]
-
-    def process_mako(template_content):
-        return MakoTemplate(template_content).render_unicode()
-
-    def make_script_tag(id, content):
-        return u"<script type='text/template' id='{0}'>{1}</script>".format(id, content)
-
-    return u'\n'.join(
-        make_script_tag(template_id_from_file_name(file_name), process_mako(read_file(file_name)))
-        for file_name in os.listdir(mustache_dir)
-        if is_valid_file_name(file_name)
-    )
