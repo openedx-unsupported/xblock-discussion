@@ -2,7 +2,6 @@
 
 import os
 import logging
-import uuid
 import datetime
 
 from uuid import uuid4
@@ -30,7 +29,9 @@ log = logging.getLogger(__name__)
 # Classes ###########################################################
 
 class DiscussionXBlock(XBlock):
-    discussion_id = String(scope=Scope.settings, default=None)
+    FIELDS_TO_INIT = ('discussion_id',)
+
+    discussion_id = String(scope=Scope.settings, default=lambda: uuid4().hex)
 
     display_name = String(
         display_name="Display Name",
@@ -56,9 +57,6 @@ class DiscussionXBlock(XBlock):
         scope=Scope.settings
     )
     sort_key = String(scope=Scope.settings)
-
-    def get_new_uuid(self):
-        return uuid4().hex
 
     @property
     def course_id(self):
@@ -101,14 +99,6 @@ class DiscussionXBlock(XBlock):
     def studio_submit(self, data, suffix=''):  # pylint: disable=unused-argument
         """
         """
-
-        # TODO find a better solution..
-        # TODO can studio do something like that without going to edit and save?
-        # Set the discussion_id
-        if self.discussion_id is None:
-            self.discussion_id = self.get_new_uuid()
-
-        fragment = Fragment()
         log.info("submitted: {}".format(data))
         self.display_name = data.get("display_name", "Untitled Discussion Topic")
         self.discussion_category = data.get("discussion_category", None)
