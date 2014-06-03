@@ -68,6 +68,11 @@ class DiscussionXBlock(XBlock):
     def student_view(self, context=None):
         fragment = Fragment()
 
+        if getattr(self.xmodule_runtime, 'is_author_mode', False):
+            fragment.add_content(render_template('templates/discussion_studio.html'))
+            fragment.add_css(load_resource('static/discussion/css/discussion-studio.css'))
+            return fragment
+
         # TODO Where should we read those permission values?
         fragment.add_content(render_template('templates/discussion.html', {
             'discussion_id': self.discussion_id,
