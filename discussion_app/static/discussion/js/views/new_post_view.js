@@ -163,7 +163,7 @@
           url: url,
           type: "POST",
           dataType: 'json',
-          async: false,
+          async: true,
           data: {
             title: title,
             body: body,

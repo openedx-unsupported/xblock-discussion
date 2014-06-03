@@ -138,7 +138,7 @@ if Backbone?
               url: url
               type: "POST"
               dataType: 'json'
-              async: false # TODO when the rest of the stuff below is made to work properly..
+              async: true
               data:
                   title: title
                   body: body
