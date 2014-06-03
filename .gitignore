@@ -54,3 +54,6 @@ docs/_build/
 
 # virtualenv
 ENV/
+
+# Node.JS (CoffeeScript)
+node_modules
