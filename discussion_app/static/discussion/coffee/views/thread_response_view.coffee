@@ -183,7 +183,7 @@ if Backbone?
           url: url
           type: "POST"
           dataType: 'json'
-          async: false # TODO when the rest of the stuff below is made to work properly..
+          async: true
           data:
               body: newBody
           error: DiscussionUtil.formErrorHandler(@$(".edit-post-form-errors"))
