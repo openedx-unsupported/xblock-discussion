@@ -7,6 +7,7 @@ from django.conf import settings
 from django.template import Context, Template
 
 from mako.template import Template as MakoTemplate
+from mako.lookup import TemplateLookup as MakoTemplateLookup
 
 # Functions #########################################################
 
@@ -50,16 +51,17 @@ def render_mustache_templates():
         if is_valid_file_name(file_name)
     )
 
-def render_mako_templates():
+def render_mako_templates(templates, context=None):
     """
     Render all template files in a directory and return the content. A file is considered a template
     if it starts with '_' and ends with '.html'.
     """
 
     template_dir = pkg_resources.resource_filename('discussion_app', 'templates/discussion')
+    lookup = MakoTemplateLookup(directories=[template_dir])
 
     def is_valid_file_name(file_name):
-        return file_name.startswith('_') and file_name.endswith('.html')
+        return (file_name in templates) and file_name.startswith('_') and file_name.endswith('.html')
 
     def read_file(file_name):
         return open(template_dir + '/' + file_name, "r").read().decode('utf-8')
@@ -68,7 +70,8 @@ def render_mako_templates():
         return file_name.rpartition('.')[0]
 
     def process_mako(template_content):
-        return MakoTemplate(template_content).render_unicode()
+        tpl = MakoTemplate(text=template_content, lookup=lookup)
+        return tpl.render_unicode(**context)
 
     def make_script_tag(id, content):
         return u"<script type='text/template' id='{0}'>{1}</script>".format(id, content)
@@ -78,6 +81,10 @@ def render_mako_templates():
         for file_name in os.listdir(template_dir)
         if is_valid_file_name(file_name)
     )
+
+def render_inline_mako_templates(context):
+    templates = ['_underscore_templates.html', '_thread_list_template.html']
+    return render_mako_templates(templates, context)
 
 def get_scenarios_from_path(scenarios_path, include_identifier=False):
     """

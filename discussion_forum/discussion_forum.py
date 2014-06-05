@@ -16,7 +16,7 @@ from xblock.fragment import Fragment
 from .utils import (
     load_resource,
     render_template,
-    render_mako_templates,
+    render_inline_mako_templates,
     render_mustache_templates
 )
 
@@ -28,6 +28,8 @@ log = logging.getLogger(__name__)
 
 # Classes ###########################################################
 
+
+@XBlock.needs('discussion')
 class DiscussionXBlock(XBlock):
     FIELDS_TO_INIT = ('discussion_id',)
 
@@ -68,18 +70,15 @@ class DiscussionXBlock(XBlock):
     def student_view(self, context=None):
         fragment = Fragment()
 
+        discussion_service = self.xmodule_runtime.service(self, 'discussion')
+
         if getattr(self.xmodule_runtime, 'is_author_mode', False):
             fragment.add_content(render_template('templates/discussion_studio.html'))
             fragment.add_css(load_resource('static/discussion/css/discussion-studio.css'))
             return fragment
 
-        # TODO Where should we read those permission values?
         fragment.add_content(render_template('templates/discussion.html', {
-            'discussion_id': self.discussion_id,
-            'has_permission_to_create_thread': True,
-            'has_permission_to_create_comment': True,
-            'has_permission_to_openclose_thread': True,
-            'has_permission_to_create_subcomment': True,
+            'discussion_id': self.discussion_id
         }))
 
         fragment.add_javascript(render_template('static/discussion/js/discussion_block.js', {
@@ -88,7 +87,9 @@ class DiscussionXBlock(XBlock):
 
         fragment.add_content(render_mustache_templates())
 
-        fragment.add_content(render_mako_templates())
+        fragment.add_content(render_inline_mako_templates(
+            context=discussion_service.get_inline_template_context(self.discussion_id))
+        )
 
         for url in get_js_urls():
             fragment.add_javascript_url(url)
