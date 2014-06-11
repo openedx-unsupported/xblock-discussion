@@ -86,7 +86,7 @@ class DiscussionXBlock(XBlock):
             context
         ))
 
-        fragment.add_javascript(render_template('static/discussion/js/discussion_block.js', {
+        fragment.add_javascript(render_template('static/discussion/js/discussion_inline.js', {
             'course_id': self.course_id
         }))
 
@@ -98,7 +98,7 @@ class DiscussionXBlock(XBlock):
         for url in get_css_urls():
             fragment.add_css_url(url)
 
-        fragment.initialize_js('DiscussionBlock')
+        fragment.initialize_js('DiscussionInlineBlock')
 
         return fragment
 
@@ -168,9 +168,9 @@ class DiscussionCourseXBlock(XBlock):
             context
         ))
 
-        # fragment.add_javascript(render_template('static/discussion/js/discussion_block.js', {
-        #     'course_id': self.course_id
-        # }))
+        fragment.add_javascript(render_template('static/discussion/js/discussion_course.js', {
+            'course_id': self.course_id
+        }))
 
         fragment.add_content(render_mustache_templates())
 
@@ -180,7 +180,7 @@ class DiscussionCourseXBlock(XBlock):
         for url in get_css_urls():
             fragment.add_css_url(url)
 
-        #fragment.initialize_js('DiscussionBlock')
+        fragment.initialize_js('DiscussionCourseBlock')
 
         return fragment
 
