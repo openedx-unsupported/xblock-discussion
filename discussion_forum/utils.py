@@ -26,6 +26,18 @@ def render_template(template_path, context={}):
     template = Template(template_str)
     return template.render(Context(context))
 
+def render_mako_template(template_path, context={}):
+    """
+    Evaluate a mako template by resource path, applying the provided context
+    """
+
+    template_dir = pkg_resources.resource_filename('discussion_app', 'templates/discussion')
+    lookup = MakoTemplateLookup(directories=[template_dir])
+
+    template_str = load_resource(template_path)
+    template = MakoTemplate(text=template_str, lookup=lookup)
+    return template.render_unicode(**context)
+
 def render_mustache_templates():
 
     mustache_dir = pkg_resources.resource_filename('discussion_app', 'templates/discussion/mustache')
@@ -81,10 +93,6 @@ def render_mako_templates(templates, context=None):
         for file_name in os.listdir(template_dir)
         if is_valid_file_name(file_name)
     )
-
-def render_inline_mako_templates(context):
-    templates = ['_underscore_templates.html', '_thread_list_template.html']
-    return render_mako_templates(templates, context)
 
 def get_scenarios_from_path(scenarios_path, include_identifier=False):
     """
