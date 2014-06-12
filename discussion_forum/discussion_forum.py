@@ -160,6 +160,8 @@ class DiscussionCourseXBlock(XBlock):
             fragment.add_css(load_resource('static/discussion/css/discussion-studio.css'))
             return fragment
 
+        fragment.add_css(load_resource('static/discussion/css/discussion-course-custom.css'))
+
         discussion_service = self.xmodule_runtime.service(self, 'discussion')
 
         context = discussion_service.get_course_template_context()
