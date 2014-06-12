@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 <%! from django.utils.translation import ugettext as _ %>
+
 <%def name="render_form_filter_dropdown(map)">
     % for child in map["children"]:
         % if child in map["entries"]:
