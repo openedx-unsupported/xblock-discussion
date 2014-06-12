@@ -1,6 +1,6 @@
 if Backbone?
-  DiscussionApp =
-    start: (elem)->
+  class @DiscussionApp
+    @start: (elem, pushState = true) ->
       # TODO: Perhaps eliminate usage of global variables when possible
       DiscussionUtil.loadRolesFromContainer()
       element = $(elem)
@@ -13,9 +13,9 @@ if Backbone?
       Content.loadContentInfos(content_info)
       discussion = new Discussion(threads, pages: thread_pages)
       new DiscussionRouter({discussion: discussion})
-      Backbone.history.start({pushState: true, root: "/courses/#{$$course_id}/discussion/forum/"})
-  DiscussionProfileApp =
-    start: (elem) ->
+      Backbone.history.start({pushState: pushState, root: "/courses/#{$$course_id}/discussion/forum/"})
+  class @DiscussionProfileApp
+    @start: (elem) ->
       element = $(elem)
       window.$$course_id = element.data("course-id")
       threads = element.data("threads")
@@ -25,7 +25,7 @@ if Backbone?
       numPages = element.data("num-pages")
       new DiscussionUserProfileView(el: element, collection: threads, page: page, numPages: numPages)
   $ ->
-    $("section.discussion").each (index, elem) ->
+    $("body.discussion section.discussion").each (index, elem) ->
       DiscussionApp.start(elem)
-    $("section.discussion-user-threads").each (index, elem) ->
+    $("body.discussion section.discussion-user-threads").each (index, elem) ->
       DiscussionProfileApp.start(elem)

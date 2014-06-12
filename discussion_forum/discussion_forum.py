@@ -16,7 +16,7 @@ from xblock.fragment import Fragment
 from .utils import (
     load_resource,
     render_template,
-    render_inline_mako_templates,
+    render_mako_template,
     render_mustache_templates
 )
 
@@ -70,26 +70,27 @@ class DiscussionXBlock(XBlock):
     def student_view(self, context=None):
         fragment = Fragment()
 
-        discussion_service = self.xmodule_runtime.service(self, 'discussion')
-
         if getattr(self.xmodule_runtime, 'is_author_mode', False):
-            fragment.add_content(render_template('templates/discussion_studio.html'))
+            fragment.add_content(render_mako_template(
+                'templates/discussion/_discussion_inline_studio.html',
+                {'discussion_id': self.discussion_id}
+            ))
             fragment.add_css(load_resource('static/discussion/css/discussion-studio.css'))
             return fragment
 
-        fragment.add_content(render_template('templates/discussion.html', {
-            'discussion_id': self.discussion_id
-        }))
+        discussion_service = self.xmodule_runtime.service(self, 'discussion')
+        context = discussion_service.get_inline_template_context(self.discussion_id)
+        context['discussion_id'] = self.discussion_id
+        fragment.add_content(render_mako_template(
+            'templates/discussion/_discussion_inline.html',
+            context
+        ))
 
-        fragment.add_javascript(render_template('static/discussion/js/discussion_block.js', {
+        fragment.add_javascript(render_template('static/discussion/js/discussion_inline.js', {
             'course_id': self.course_id
         }))
 
         fragment.add_content(render_mustache_templates())
-
-        fragment.add_content(render_inline_mako_templates(
-            context=discussion_service.get_inline_template_context(self.discussion_id))
-        )
 
         for url in get_js_urls():
             fragment.add_javascript_url(url)
@@ -97,7 +98,7 @@ class DiscussionXBlock(XBlock):
         for url in get_css_urls():
             fragment.add_css_url(url)
 
-        fragment.initialize_js('DiscussionBlock')
+        fragment.initialize_js('DiscussionInlineBlock')
 
         return fragment
 
@@ -119,8 +120,8 @@ class DiscussionXBlock(XBlock):
             "discussion_target": self.discussion_target
             }
         log.info("rendering template in context: {}".format(context))
-        fragment.add_content(render_template('templates/discussion_edit.html', context))
-        fragment.add_javascript(load_resource('static/discussion/js/discussion_edit.js'))
+        fragment.add_content(render_template('templates/discussion_inline_edit.html', context))
+        fragment.add_javascript(load_resource('static/discussion/js/discussion_inline_edit.js'))
 
         fragment.initialize_js('DiscussionEditBlock')
         return fragment
@@ -137,3 +138,53 @@ class DiscussionXBlock(XBlock):
                 </vertical_demo>
              """),
         ]
+
+
+@XBlock.needs('discussion')
+class DiscussionCourseXBlock(XBlock):
+
+    display_name = String(
+        display_name="Display Name",
+        help="Display name for this module",
+        default="Discussion Course",
+        scope=Scope.settings
+    )
+
+    def student_view(self, context=None):
+        fragment = Fragment()
+
+        if getattr(self.xmodule_runtime, 'is_author_mode', False):
+            fragment.add_content(render_mako_template(
+                'templates/discussion/_discussion_course_studio.html'
+            ))
+            fragment.add_css(load_resource('static/discussion/css/discussion-studio.css'))
+            return fragment
+
+        discussion_service = self.xmodule_runtime.service(self, 'discussion')
+
+        context = discussion_service.get_course_template_context()
+        fragment.add_content(render_mako_template(
+            'templates/discussion/_discussion_course.html',
+            context
+        ))
+
+        fragment.add_javascript(render_template('static/discussion/js/discussion_course.js', {
+            'course_id': self.course_id
+        }))
+
+        fragment.add_content(render_mustache_templates())
+
+        for url in get_js_urls():
+            fragment.add_javascript_url(url)
+
+        for url in get_css_urls():
+            fragment.add_css_url(url)
+
+        fragment.initialize_js('DiscussionCourseBlock')
+
+        return fragment
+
+    def studio_view(self, context=None):
+        fragment = Fragment()
+
+        return fragment
