@@ -1,10 +1,28 @@
-<section class="discussion container" id="discussion-container" data-roles="${roles}" data-course-id="${course_id}" data-user-info="${user_info}" data-threads="${threads}" data-thread-pages="${thread_pages}" data-content-info="${annotated_content_info}" data-flag-moderator="${flag_moderator}">
-    <div class="discussion-body">
-        <div class="sidebar"></div>
-        <div class="discussion-column">
-        </div>
-    </div>
-</section>
+<%! from django.utils.translation import ugettext as _ %>
 
-<%include file="_underscore_templates.html" />
-<%include file="_thread_list_template.html" />
+<div class="discussion-course">
+
+  % if enable_new_post_btn and has_permission_to_create_thread:
+  <div class="discussion-course-new right">
+    <a href="#" class="new-post-btn" role="button"><span class="icon icon-edit new-post-icon"></span>${_("New Post")}</a>
+  </div>
+
+  <div style="display: block; clear: both; height: 1px;"></div>
+  % endif
+
+  <%include file="_new_post.html" />
+
+  <div style="display:block;">
+  <section class="discussion container" id="discussion-container" data-roles="${roles}" data-course-id="${course_id}" data-user-info="${user_info}" data-threads="${threads}" data-thread-pages="${thread_pages}" data-content-info="${annotated_content_info}" data-flag-moderator="${flag_moderator}">
+    <div class="discussion-body">
+      <div class="sidebar"></div>
+      <div class="discussion-column">
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <%include file="_underscore_templates.html" />
+  <%include file="_thread_list_template.html" />
+
+</div>
