@@ -1,7 +1,7 @@
 /* Some fixes that should only be applied when using discussion as an xblock */
 
 .discussion-body .sort-bar li {
-    margin: 2px 2px 0 0 !important;
+    margin: 4px 0px 0 0 !important;
 }
 
 .discussion-body .post-list a .title {
