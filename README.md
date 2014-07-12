@@ -30,6 +30,15 @@ list. Note that the use of *discussion-forum* instead of *discussion* is current
 because *discussion* is reserved to the xmodule, which is still supported.
 3. Click on the *Save changes* button.
 
+
+To also use the xblock for the course discussion:
+
+1. Add *"discussion-course"* to *advanced_modules* the same way as described above.
+2. Create a new section with the name *DISCUSSION_TAB*.
+3. Under the new secion -- after creating subsections -- add a new *Advanced... discussion-course* unit.
+4. Publish changes.
+
+
 Development
 -----------
 
