@@ -135,7 +135,7 @@
         this.discussion.reset(response.discussion_data, {
           silent: false
         });
-        if (response.is_cohorted && response.is_moderator) {
+        if (response.is_cohorted) {
           source = "script#_inline_discussion_cohorted";
         } else {
           source = "script#_inline_discussion";
