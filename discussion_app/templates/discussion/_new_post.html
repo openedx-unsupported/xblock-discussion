@@ -49,15 +49,17 @@
                     %elif course.allow_anonymous_to_peers:
                         <input type="checkbox" name="anonymous_to_peers" class="discussion-anonymous-to-peers" id="new-post-anonymous-to-peers"><label for="new-post-anonymous-to-peers">${_("post anonymously to classmates")}</label>
                     %endif
-                    %if is_course_cohorted and is_moderator:
+                    %if is_course_cohorted:
                     <div class="form-group-label choose-cohort">
                         ## Translators: This labels the selector for which group of students can view a post
                         ${_("Make visible to:")}
                         <select class="group-filter-select new-post-group" name = "group_id">
+                          %if is_moderator:
                             <option value="">${_("All Groups")}</option>
+                          %endif
                             %for c in cohorts:
                                 <option value="${c.id}"
-                                %if user_cohort and str(user_cohort) == str(c.id):
+                                %if user_cohorts and str(c.id) in user_cohorts:
                                     selected
                                 %endif
                                 >${c.name}</option>
