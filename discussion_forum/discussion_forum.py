@@ -64,7 +64,10 @@ class DiscussionXBlock(XBlock):
     def course_id(self):
         # TODO really implement this
         if hasattr(self, 'xmodule_runtime'):
-            return self.xmodule_runtime.course_id.to_deprecated_string()
+            if hasattr(self.xmodule_runtime.course_id, 'to_deprecated_string'):
+                return self.xmodule_runtime.course_id.to_deprecated_string()
+            else:
+                return self.xmodule_runtime.course_id
         return 'foo'
 
     def student_view(self, context=None):
