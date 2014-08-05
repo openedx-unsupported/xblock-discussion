@@ -34,6 +34,10 @@
       return $("script#" + id).html();
     };
 
+    DiscussionUtil.setUser = function(user) {
+      return this.user = user;
+    };
+
     DiscussionUtil.loadRoles = function(roles) {
       return this.roleIds = roles;
     };
@@ -48,13 +52,19 @@
     };
 
     DiscussionUtil.isStaff = function(user_id) {
-      var staff;
+      var staff, _ref;
+      if (user_id == null) {
+        user_id = (_ref = this.user) != null ? _ref.id : void 0;
+      }
       staff = _.union(this.roleIds['Moderator'], this.roleIds['Administrator']);
       return _.include(staff, parseInt(user_id));
     };
 
     DiscussionUtil.isTA = function(user_id) {
-      var ta;
+      var ta, _ref;
+      if (user_id == null) {
+        user_id = (_ref = this.user) != null ? _ref.id : void 0;
+      }
       ta = _.union(this.roleIds['Community TA']);
       return _.include(ta, parseInt(user_id));
     };
@@ -103,6 +113,7 @@
         downvote_comment: "/courses/" + $$course_id + "/discussion/comments/" + param + "/downvote",
         undo_vote_for_comment: "/courses/" + $$course_id + "/discussion/comments/" + param + "/unvote",
         upload: "/courses/" + $$course_id + "/discussion/upload",
+        users: "/courses/" + $$course_id + "/discussion/users",
         search: "/courses/" + $$course_id + "/discussion/forum/search",
         retrieve_discussion: "/courses/" + $$course_id + "/discussion/forum/" + param + "/inline",
         retrieve_single_thread: "/courses/" + $$course_id + "/discussion/forum/" + param + "/threads/" + param1,
@@ -117,6 +128,12 @@
         "notifications_status": "/notification_prefs/status/"
       };
       return this.baseUrl + urls[name];
+    };
+
+    DiscussionUtil.ignoreEnterKey = function(event) {
+      if (event.which === 13) {
+        return event.preventDefault();
+      }
     };
 
     DiscussionUtil.activateOnSpace = function(event, func) {

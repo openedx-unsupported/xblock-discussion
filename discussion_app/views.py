@@ -13,7 +13,7 @@ from django.templatetags.static import static
 TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
 
 # Update this after building a new version of the minified JS file.
-JS_SHA = '541dfc6692c9'
+JS_SHA = 'ef6e5c27922b'
 
 JS_URLS = [
     # VENDOR
@@ -35,6 +35,7 @@ JS_URLS = [
     # DISCUSSION
     'discussion/js/tooltip_manager.js',
     'discussion/js/models/discussion_user.js',
+    'discussion/js/models/discussion_course_settings.js',
     'discussion/js/content.js',
     'discussion/js/discussion.js',
     'discussion/js/main.js',
@@ -43,7 +44,6 @@ JS_URLS = [
     'discussion/js/views/response_comment_view.js',
     'discussion/js/views/thread_response_show_view.js',
     'discussion/js/views/discussion_user_profile_view.js',
-    'discussion/js/views/new_post_inline_vew.js',
     'discussion/js/views/thread_response_edit_view.js',
     'discussion/js/views/discussion_thread_view.js',
     'discussion/js/views/discussion_thread_view_inline.js',

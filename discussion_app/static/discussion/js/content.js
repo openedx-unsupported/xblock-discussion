@@ -88,11 +88,20 @@
       };
 
       Content.prototype.initialize = function() {
+        var userId;
         Content.addContent(this.id, this);
+        userId = this.get('user_id');
+        if (userId != null) {
+          this.set('staff_authored', DiscussionUtil.isStaff(userId));
+          this.set('community_ta_authored', DiscussionUtil.isTA(userId));
+        } else {
+          this.set('staff_authored', false);
+          this.set('community_ta_authored', false);
+        }
         if (Content.getInfo(this.id)) {
           this.updateInfo(Content.getInfo(this.id));
         }
-        this.set('user_url', DiscussionUtil.urlFor('user_profile', this.get('user_id')));
+        this.set('user_url', DiscussionUtil.urlFor('user_profile', userId));
         return this.resetComments(this.get('children'));
       };
 
