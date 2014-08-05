@@ -31,6 +31,7 @@ JS_URLS = [
     # DISCUSSION
     'discussion/js/tooltip_manager.js',
     'discussion/js/models/discussion_user.js',
+    'discussion/js/models/discussion_course_settings.js',
     'discussion/js/content.js',
     'discussion/js/discussion.js',
     'discussion/js/main.js',

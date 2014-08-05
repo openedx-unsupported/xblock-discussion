@@ -15,18 +15,95 @@
         return _ref;
       }
 
-      NewPostView.prototype.initialize = function() {
-        this.dropdownButton = this.$(".topic_dropdown_button");
-        this.topicMenu = this.$(".topic_menu_wrapper");
-        this.menuOpen = this.dropdownButton.hasClass('dropped');
-        this.topicId = this.$(".topic").first().data("discussion_id");
-        this.topicText = this.getFullTopicName(this.$(".topic").first());
-        this.maxNameWidth = 100;
-        this.setSelectedTopic();
-        DiscussionUtil.makeWmdEditor(this.$el, $.proxy(this.$, this), "new-post-body");
-        if (this.$($(".topic_menu li a")[0]).attr('cohorted') !== "True") {
-          return $('.choose-cohort').hide();
+      NewPostView.prototype.initialize = function(options) {
+        var _ref1;
+        this.mode = options.mode || "inline";
+        if ((_ref1 = this.mode) !== "tab" && _ref1 !== "inline") {
+          throw new Error("invalid mode: " + this.mode);
         }
+        this.course_settings = options.course_settings;
+        this.maxNameWidth = 100;
+        return this.topicId = options.topicId;
+      };
+
+      NewPostView.prototype.render = function() {
+        if (this.mode === "tab") {
+          this.$el.html(_.template($("#new-post-tab-template").html(), {
+            topic_dropdown_html: this.getTopicDropdownHTML(),
+            options_html: this.getOptionsHTML(),
+            editor_html: this.getEditorHTML()
+          }));
+          this.dropdownButton = this.$(".topic_dropdown_button");
+          this.topicMenu = this.$(".topic_menu_wrapper");
+          this.menuOpen = this.dropdownButton.hasClass('dropped');
+          this.topicId = this.$(".topic").first().data("discussion_id");
+          this.topicText = this.getFullTopicName(this.$(".topic").first());
+          if (!this.$(".topic_menu li a").first().is("[cohorted=true]")) {
+            $('.choose-cohort').hide();
+          }
+          this.setSelectedTopic();
+        } else {
+          this.$el.html(_.template($("#new-post-inline-template").html(), {
+            options_html: this.getOptionsHTML(),
+            editor_html: this.getEditorHTML()
+          }));
+        }
+        return DiscussionUtil.makeWmdEditor(this.$el, $.proxy(this.$, this), "new-post-body");
+      };
+
+      NewPostView.prototype.getTopicDropdownHTML = function() {
+        var topics_html, _renderCategoryMap;
+        _renderCategoryMap = function(map) {
+          var category_template, entry, entry_template, html, name, _i, _len, _ref1;
+          category_template = _.template($("#new-post-menu-category-template").html());
+          entry_template = _.template($("#new-post-menu-entry-template").html());
+          html = "";
+          _ref1 = map.children;
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            name = _ref1[_i];
+            if (name in map.entries) {
+              entry = map.entries[name];
+              html += entry_template({
+                text: name,
+                id: entry.id,
+                is_cohorted: entry.is_cohorted
+              });
+            } else {
+              html += category_template({
+                text: name,
+                entries: _renderCategoryMap(map.subcategories[name])
+              });
+            }
+          }
+          return html;
+        };
+        topics_html = _renderCategoryMap(this.course_settings.get("category_map"));
+        return _.template($("#new-post-topic-dropdown-template").html(), {
+          topics_html: topics_html
+        });
+      };
+
+      NewPostView.prototype.getEditorHTML = function() {
+        return _.template($("#new-post-editor-template").html(), {});
+      };
+
+      NewPostView.prototype.getOptionsHTML = function() {
+        var cohort_options, context, user_cohort_id;
+        if (this.course_settings.get("is_cohorted") && DiscussionUtil.isStaff()) {
+          user_cohort_id = $("#discussion-container").data("user-cohort-id");
+          cohort_options = _.map(this.course_settings.get("cohorts"), function(cohort) {
+            return {
+              value: cohort.id,
+              text: cohort.name,
+              selected: cohort.id === user_cohort_id
+            };
+          });
+        } else {
+          cohort_options = null;
+        }
+        context = _.clone(this.course_settings.attributes);
+        context.cohort_options = cohort_options;
+        return _.template($("#new-post-options-template").html(), context);
       };
 
       NewPostView.prototype.events = {
@@ -39,6 +116,46 @@
 
       NewPostView.prototype.ignoreClick = function(event) {
         return event.stopPropagation();
+      };
+
+      NewPostView.prototype.createPost = function(event) {
+        var anonymous, anonymous_to_peers, body, follow, group, title, url,
+          _this = this;
+        event.preventDefault();
+        title = this.$(".new-post-title").val();
+        body = this.$(".new-post-body").find(".wmd-input").val();
+        group = this.$(".new-post-group option:selected").attr("value");
+        anonymous = false || this.$("input.discussion-anonymous").is(":checked");
+        anonymous_to_peers = false || this.$("input.discussion-anonymous-to-peers").is(":checked");
+        follow = false || this.$("input.discussion-follow").is(":checked");
+        url = DiscussionUtil.urlFor('create_thread', this.topicId);
+        return DiscussionUtil.safeAjax({
+          $elem: $(event.target),
+          $loading: event ? $(event.target) : void 0,
+          url: url,
+          type: "POST",
+          dataType: 'json',
+          async: false,
+          data: {
+            title: title,
+            body: body,
+            anonymous: anonymous,
+            anonymous_to_peers: anonymous_to_peers,
+            auto_subscribe: follow,
+            group_id: group
+          },
+          error: DiscussionUtil.formErrorHandler(this.$(".new-post-form-errors")),
+          success: function(response, textStatus) {
+            var thread;
+            thread = new Thread(response['content']);
+            DiscussionUtil.clearFormErrors(_this.$(".new-post-form-errors"));
+            _this.$el.hide();
+            _this.$(".new-post-title").val("").attr("prev-text", "");
+            _this.$(".new-post-body textarea").val("").attr("prev-text", "");
+            _this.$(".wmd-preview p").html("");
+            return _this.collection.add(thread);
+          }
+        });
       };
 
       NewPostView.prototype.toggleTopicDropdown = function(event) {
@@ -57,7 +174,7 @@
         $(".form-topic-drop-search-input").focus();
         $("body").bind("keydown", this.setActiveItem);
         $("body").bind("click", this.hideTopicDropdown);
-        return this.maxNameWidth = this.dropdownButton.width() * 0.9;
+        return this.maxNameWidth = this.dropdownButton.width() - 40;
       };
 
       NewPostView.prototype.hideTopicDropdown = function() {
@@ -76,7 +193,7 @@
           this.topicText = this.getFullTopicName($target);
           this.topicId = $target.data('discussion_id');
           this.setSelectedTopic();
-          if ($target.attr('cohorted') === "True") {
+          if ($target.is('[cohorted=true]')) {
             return $('.choose-cohort').show();
           } else {
             return $('.choose-cohort').hide();
@@ -92,7 +209,7 @@
         var name;
         name = topicElement.html();
         topicElement.parents('ul').not('.topic_menu').each(function() {
-          return name = $(this).siblings('a').html() + ' / ' + name;
+          return name = $(this).siblings('a').text() + ' / ' + name;
         });
         return name;
       };
@@ -144,46 +261,6 @@
           name = gettext("…") + " / " + rawName + " " + gettext("…");
         }
         return name;
-      };
-
-      NewPostView.prototype.createPost = function(event) {
-        var anonymous, anonymous_to_peers, body, follow, group, title, url,
-          _this = this;
-        event.preventDefault();
-        title = this.$(".new-post-title").val();
-        body = this.$(".new-post-body").find(".wmd-input").val();
-        group = this.$(".new-post-group option:selected").attr("value");
-        anonymous = false || this.$("input.discussion-anonymous").is(":checked");
-        anonymous_to_peers = false || this.$("input.discussion-anonymous-to-peers").is(":checked");
-        follow = false || this.$("input.discussion-follow").is(":checked");
-        url = DiscussionUtil.urlFor('create_thread', this.topicId);
-        return DiscussionUtil.safeAjax({
-          $elem: $(event.target),
-          $loading: event ? $(event.target) : void 0,
-          url: url,
-          type: "POST",
-          dataType: 'json',
-          async: true,
-          data: {
-            title: title,
-            body: body,
-            anonymous: anonymous,
-            anonymous_to_peers: anonymous_to_peers,
-            auto_subscribe: follow,
-            group_id: group
-          },
-          error: DiscussionUtil.formErrorHandler(this.$(".new-post-form-errors")),
-          success: function(response, textStatus) {
-            var thread;
-            thread = new Thread(response['content']);
-            DiscussionUtil.clearFormErrors(_this.$(".new-post-form-errors"));
-            _this.$el.hide();
-            _this.$(".new-post-title").val("").attr("prev-text", "");
-            _this.$(".new-post-body textarea").val("").attr("prev-text", "");
-            _this.$(".wmd-preview p").html("");
-            return _this.collection.add(thread);
-          }
-        });
       };
 
       NewPostView.prototype.setActiveItem = function(event) {

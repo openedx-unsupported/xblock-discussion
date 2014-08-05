@@ -123,29 +123,21 @@
       };
 
       DiscussionModuleView.prototype.renderDiscussion = function($elem, response, textStatus, discussionId) {
-        var $discussion, allow_anonymous, allow_anonymous_to_peers, cohorts, source;
+        var $discussion, user;
         $elem.focus();
-        window.user = new DiscussionUser(response.user_info);
+        user = new DiscussionUser(response.user_info);
+        window.user = user;
+        DiscussionUtil.setUser(user);
         Content.loadContentInfos(response.annotated_content_info);
         DiscussionUtil.loadRoles(response.roles);
-        allow_anonymous = response.allow_anonymous;
-        allow_anonymous_to_peers = response.allow_anonymous_to_peers;
-        cohorts = response.cohorts;
+        this.course_settings = new DiscussionCourseSettings(response.course_settings);
         this.discussion = new Discussion();
         this.discussion.reset(response.discussion_data, {
           silent: false
         });
-        if (response.is_cohorted) {
-          source = "script#_inline_discussion_cohorted";
-        } else {
-          source = "script#_inline_discussion";
-        }
-        $discussion = $(Mustache.render($(source).html(), {
+        $discussion = $(Mustache.render($("script#_inline_discussion").html(), {
           'threads': response.discussion_data,
-          'discussionId': discussionId,
-          'allow_anonymous_to_peers': allow_anonymous_to_peers,
-          'allow_anonymous': allow_anonymous,
-          'cohorts': cohorts
+          'discussionId': discussionId
         }));
         if (this.$('section.discussion').length) {
           this.$('section.discussion').replaceWith($discussion);
@@ -163,10 +155,13 @@
           return dtv.render();
         });
         DiscussionUtil.bulkUpdateContentInfo(window.$$annotated_content_info);
-        this.newPostView = new NewPostInlineView({
-          el: this.$('.new-post-article'),
-          collection: this.discussion
+        this.newPostView = new NewPostView({
+          el: this.newPostForm,
+          collection: this.discussion,
+          course_settings: this.course_settings,
+          topicId: discussionId
         });
+        this.newPostView.render();
         this.discussion.on("add", this.addThread);
         this.retrieved = true;
         this.showed = true;

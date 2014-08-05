@@ -22,10 +22,11 @@
         }
         this.pages = options['pages'] || 1;
         this.current_page = 1;
+        this.sort_preference = options['sort'];
         this.bind("add", function(item) {
           return item.discussion = _this;
         });
-        this.comparator = this.sortByDateRecentFirst;
+        this.setSortComparator(this.sort_preference);
         return this.on("thread:remove", function(thread) {
           return _this.remove(thread);
         });
@@ -39,6 +40,17 @@
 
       Discussion.prototype.hasMorePages = function() {
         return this.current_page < this.pages;
+      };
+
+      Discussion.prototype.setSortComparator = function(sortBy) {
+        switch (sortBy) {
+          case 'date':
+            return this.comparator = this.sortByDateRecentFirst;
+          case 'votes':
+            return this.comparator = this.sortByVotes;
+          case 'comments':
+            return this.comparator = this.sortByComments;
+        }
       };
 
       Discussion.prototype.addThread = function(thread, options) {
@@ -112,9 +124,9 @@
             ][0];
             new_collection = _.union(models, new_threads);
             Content.loadContentInfos(response.annotated_content_info);
-            _this.reset(new_collection);
             _this.pages = response.num_pages;
-            return _this.current_page = response.page;
+            _this.current_page = response.page;
+            return _this.reset(new_collection);
           },
           error: error
         });

@@ -27,20 +27,24 @@
       DiscussionRouter.prototype.initialize = function(options) {
         var _this = this;
         this.discussion = options['discussion'];
+        this.course_settings = options['course_settings'];
         this.nav = new DiscussionThreadListView({
           collection: this.discussion,
-          el: $(".sidebar")
+          el: $(".forum-nav")
         });
         this.nav.on("thread:selected", this.navigateToThread);
         this.nav.on("thread:removed", this.navigateToAllThreads);
         this.nav.on("threads:rendered", this.setActiveThread);
-        this.nav.render();
-        this.newPostView = new NewPostView({
-          el: $(".new-post-article"),
-          collection: this.discussion
-        });
         this.nav.on("thread:created", this.navigateToThread);
+        this.nav.render();
         this.newPost = $('.new-post-article');
+        this.newPostView = new NewPostView({
+          el: this.newPost,
+          collection: this.discussion,
+          course_settings: this.course_settings,
+          mode: "tab"
+        });
+        this.newPostView.render();
         $('.new-post-btn').bind("click", this.showNewPost);
         $('.new-post-btn').bind("keydown", function(event) {
           return DiscussionUtil.activateOnSpace(event, _this.showNewPost);
