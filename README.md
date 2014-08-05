@@ -1,48 +1,81 @@
 Discussion XBlock
 =================
 
-This is an initial prototype for redesigning Discussion. This project is in the early stages of
-development and is not ready for general use.
+This is an initial prototype for redesigning Discussion. This project
+is in the early stages of development and is not ready for general
+use. The XBlock currently only works with the edx-solutions' forks of
+[edx-platform](https://github.com/edx-solutions/edx-platform) and
+[cs_comments_service](https://github.com/edx-solutions/cs_comments_service). The
+patches are in the process of being merged upstream, so this will
+eventually not be required anymore.
 
 Installation
 ------------
 
-From the xblock-discussion repository, and within the Python virtual environment you used to setup
-the XBlock workbench or the LMS, install the requirements:
+From the xblock-discussion repository, and within the Python virtual
+environment you used to setup the XBlock workbench or the LMS, install
+the requirements:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Since XBlock and xblock-discussion are both in development, it is recommended to use the XBlock
-revision specified in the workbench/LMS requirements.txt file. The main XBlock repository is not
-always ready to use in edx-platform and you might experience some issues.
+Since XBlock and xblock-discussion are both in development, it is
+recommended to use the XBlock revision specified in the workbench/LMS
+`requirements.txt` file. The main XBlock repository is not always
+ready to use in edx-platform and you might experience some issues.
 
 Enabling in Studio
 ------------------
 
-You can enable the discussion xblock in studio through the advanced settings:
+You can enable the discussion xblock in studio through the advanced
+settings:
 
-1. From the main page of a specific course, click on *Settings*, *Advanced Settings* in the top
-menu.
-2. Check for the *advanced_modules* policy key, and add *"discussion-forum"* in the policy value
-list. Note that the use of *discussion-forum* instead of *discussion* is currently a limitation
-because *discussion* is reserved to the xmodule, which is still supported.
+1. From the main page of a specific course, click on *Settings*,
+   *Advanced Settings* in the top menu.
+2. Check for the *advanced_modules* policy key, and add
+   `"discussion-forum"` in the policy value list. Note that the use of
+   `discussion-forum` instead of `discussion` is currently a limitation
+   because `discussion` is reserved to the xmodule, which is still
+   supported.
+
 3. Click on the *Save changes* button.
-
 
 To also use the xblock for the course discussion:
 
-1. Add *"discussion-course"* to *advanced_modules* the same way as described above.
+1. Add `"discussion-course"` to *advanced_modules* the same way as
+   described above.
 2. Create a new section with the name *DISCUSSION_TAB*.
-3. Under the new secion -- after creating subsections -- add a new *Advanced... discussion-course* unit.
+3. Under the new secion -- after creating subsections -- add a new
+   *Advanced... discussion-course* unit.
 4. Publish changes.
 
+Usage
+-----
+
+To add the discussion block to a unit, choose *Discussion* from the
+*Advanced Components* list in the studio.
+
+![Studio View](https://raw.githubusercontent.com/mtyaka/xblock-discussion/readme-doc/doc/img/studio-view.png)
+
+Clicking the *Edit* button opens up a form that will let you change some
+basic settings:
+
+![Edit View](https://raw.githubusercontent.com/mtyaka/xblock-discussion/readme-doc/doc/img/edit-view.png)
+
+The students will be able to post comments on the unit:
+
+![Student View Initial](https://raw.githubusercontent.com/mtyaka/xblock-discussion/readme-doc/doc/img/student-view-1.png)
+
+![Student View Post](https://raw.githubusercontent.com/mtyaka/xblock-discussion/readme-doc/doc/img/student-view-2.png)
+
+![Student View List](https://raw.githubusercontent.com/mtyaka/xblock-discussion/readme-doc/doc/img/student-view-3.png)
 
 Development
 -----------
 
-Node.js and npm are required modify the coffeescript files, which are then compiled into javascript.
+Node.js and npm are required to be able to compile the coffeescript
+files into javascript.
 
 Install the node.js coffeescript module:
 
@@ -64,7 +97,8 @@ Running Tests
 Quality Check
 -------------
 
-Note that the code doesn't pass pylint at the moment. Will be fixed soon.
+Note that the code doesn't pass pylint at the moment. Will be fixed
+soon.
 
 Install pylint:
 
@@ -87,19 +121,20 @@ Disable quality violations on a line or file:
 License
 -------
 
-The code in this repository is licensed under version 3 of the AGPL unless
-otherwise noted.
+The code in this repository is licensed under version 3 of the AGPL
+unless otherwise noted.
 
-Please see ``LICENSE`` for details.
+Please see `LICENSE` for details.
 
 Reporting Security Issues
 -------------------------
 
-Please do not report security issues in public. Please email security@edx.org
+Please do not report security issues in public. Please email
+security@edx.org.
 
 Mailing List and IRC Channel
 ----------------------------
 
 You can discuss this code on the
-`edx-code Google Group <https://groups.google.com/forum/#!forum/edx-code>`_ or
-in the `edx-code` IRC channel on Freenode.
+[edx-code Google Group](https://groups.google.com/forum/#!forum/edx-code)
+or in the `#edx-code` IRC channel on Freenode.
