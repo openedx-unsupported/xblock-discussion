@@ -29,8 +29,23 @@ log = logging.getLogger(__name__)
 # Classes ###########################################################
 
 
+class XBlockCourseMixin(object):
+    """XBlock Mixin for course properties/functions shared
+       between inline and course discussion xblocks.
+    """
+
+    @property
+    def course_id(self):
+        if hasattr(self, 'xmodule_runtime'):
+            if hasattr(self.xmodule_runtime.course_id, 'to_deprecated_string'):
+                return self.xmodule_runtime.course_id.to_deprecated_string()
+            else:
+                return self.xmodule_runtime.course_id
+        return 'None'
+
+
 @XBlock.needs('discussion')
-class DiscussionXBlock(XBlock):
+class DiscussionXBlock(XBlock, XBlockCourseMixin):
     FIELDS_TO_INIT = ('discussion_id',)
 
     discussion_id = String(scope=Scope.settings, default=lambda: uuid4().hex)
@@ -59,16 +74,6 @@ class DiscussionXBlock(XBlock):
         scope=Scope.settings
     )
     sort_key = String(scope=Scope.settings)
-
-    @property
-    def course_id(self):
-        # TODO really implement this
-        if hasattr(self, 'xmodule_runtime'):
-            if hasattr(self.xmodule_runtime.course_id, 'to_deprecated_string'):
-                return self.xmodule_runtime.course_id.to_deprecated_string()
-            else:
-                return self.xmodule_runtime.course_id
-        return 'foo'
 
     def student_view(self, context=None):
         fragment = Fragment()
@@ -144,7 +149,7 @@ class DiscussionXBlock(XBlock):
 
 
 @XBlock.needs('discussion')
-class DiscussionCourseXBlock(XBlock):
+class DiscussionCourseXBlock(XBlock, XBlockCourseMixin):
 
     display_name = String(
         display_name="Display Name",
@@ -169,6 +174,7 @@ class DiscussionCourseXBlock(XBlock):
 
         context = discussion_service.get_course_template_context()
         context['enable_new_post_btn'] = True
+        context['course_id'] = self.course_id
         fragment.add_content(render_mako_template(
             'templates/discussion/_discussion_course.html',
             context
