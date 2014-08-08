@@ -40,7 +40,6 @@ JS_URLS = [
     'discussion/js/views/response_comment_view.js',
     'discussion/js/views/thread_response_show_view.js',
     'discussion/js/views/discussion_user_profile_view.js',
-    'discussion/js/views/new_post_inline_vew.js',
     'discussion/js/views/thread_response_edit_view.js',
     'discussion/js/views/discussion_thread_view.js',
     'discussion/js/views/discussion_thread_view_inline.js',
