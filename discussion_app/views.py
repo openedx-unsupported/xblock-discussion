@@ -13,7 +13,7 @@ from django.templatetags.static import static
 TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
 
 # Update this after building a new version of the minified JS file.
-JS_SHA = 'ef6e5c27922b'
+JS_SHA = 'af30a2c68ded'
 
 JS_URLS = [
     # VENDOR
