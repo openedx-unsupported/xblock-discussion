@@ -293,7 +293,8 @@
           }
         });
         thread_id = null;
-        return this.trigger("thread:removed");
+        this.trigger("thread:removed");
+        return this.updateSidebar();
       };
 
       DiscussionThreadListView.prototype.toggleTopicDrop = function(event) {
