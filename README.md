@@ -56,20 +56,20 @@ Usage
 To add the discussion block to a unit, choose *Discussion* from the
 *Advanced Components* list in the studio.
 
-![Studio View](https://raw.githubusercontent.com/mtyaka/xblock-discussion/readme-doc/doc/img/studio-view.png)
+![Studio View](https://raw.githubusercontent.com/edx-solutions/xblock-discussion/aad91f12b37c47728bd545ffc63e8de79d421aa3/doc/img/studio-view.png)
 
 Clicking the *Edit* button opens up a form that will let you change some
 basic settings:
 
-![Edit View](https://raw.githubusercontent.com/mtyaka/xblock-discussion/readme-doc/doc/img/edit-view.png)
+![Edit View](https://raw.githubusercontent.com/edx-solutions/xblock-discussion/aad91f12b37c47728bd545ffc63e8de79d421aa3/doc/img/edit-view.png)
 
 The students will be able to post comments on the unit:
 
-![Student View Initial](https://raw.githubusercontent.com/mtyaka/xblock-discussion/readme-doc/doc/img/student-view-1.png)
+![Student View Initial](https://raw.githubusercontent.com/edx-solutions/xblock-discussion/aad91f12b37c47728bd545ffc63e8de79d421aa3/doc/img/student-view-1.png)
 
-![Student View Post](https://raw.githubusercontent.com/mtyaka/xblock-discussion/readme-doc/doc/img/student-view-2.png)
+![Student View Post](https://raw.githubusercontent.com/edx-solutions/xblock-discussion/aad91f12b37c47728bd545ffc63e8de79d421aa3/doc/img/student-view-2.png)
 
-![Student View List](https://raw.githubusercontent.com/mtyaka/xblock-discussion/readme-doc/doc/img/student-view-3.png)
+![Student View List](https://raw.githubusercontent.com/edx-solutions/xblock-discussion/aad91f12b37c47728bd545ffc63e8de79d421aa3/doc/img/student-view-3.png)
 
 Development
 -----------
