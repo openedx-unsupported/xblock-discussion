@@ -237,7 +237,9 @@ if Backbone?
             else
               $('input.email-setting').removeAttr('checked')
       thread_id = null
-      @trigger("thread:removed")  
+      @trigger("thread:removed")
+      # Temporary fix for the initial sidebar height, to remove when merging sync-upstream branch
+      @updateSidebar()
       #select all threads
 
 
