@@ -590,7 +590,7 @@
 
       DiscussionThreadListView.prototype.updateEmailNotifications = function() {
         var _this = this;
-        if ($('input.email-setting').attr('checked')) {
+        if ($('input.email-setting').is(':checked')) {
           return DiscussionUtil.safeAjax({
             url: DiscussionUtil.urlFor("enable_notifications"),
             type: "POST",

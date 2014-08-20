@@ -472,7 +472,7 @@ if Backbone?
       @retrieveFirstPage(event)
 
     updateEmailNotifications: () =>
-      if $('input.email-setting').attr('checked')
+      if $('input.email-setting').is(':checked')
         DiscussionUtil.safeAjax
           url: DiscussionUtil.urlFor("enable_notifications")
           type: "POST"
