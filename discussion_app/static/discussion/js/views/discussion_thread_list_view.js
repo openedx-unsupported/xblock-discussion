@@ -90,12 +90,10 @@
       };
 
       DiscussionThreadListView.prototype.updateSidebar = function() {
-        var amount, discussionBody, discussionBottomOffset, discussionsBodyBottom, discussionsBodyTop, postListWrapper, scrollTop, sidebar, sidebarHeight, sidebarWidth, topOffset, windowHeight;
+        var discussionBody, discussionsBodyTop, scrollTop, sidebar, sidebarWidth;
         scrollTop = $(window).scrollTop();
-        windowHeight = $(window).height();
         discussionBody = $(".discussion-article");
         discussionsBodyTop = discussionBody[0] ? discussionBody.offset().top : void 0;
-        discussionsBodyBottom = discussionsBodyTop + discussionBody.outerHeight();
         sidebar = $(".sidebar");
         if (scrollTop > discussionsBodyTop - this.sidebar_padding) {
           sidebar.css('top', scrollTop - discussionsBodyTop + this.sidebar_padding);
@@ -103,16 +101,7 @@
           sidebar.css('top', '0');
         }
         sidebarWidth = .31 * $(".discussion-body").width();
-        sidebar.css('width', sidebarWidth + 'px');
-        sidebarHeight = windowHeight - Math.max(discussionsBodyTop - scrollTop, this.sidebar_padding);
-        topOffset = scrollTop + windowHeight;
-        discussionBottomOffset = discussionsBodyBottom + this.sidebar_padding;
-        amount = Math.max(topOffset - discussionBottomOffset, 0);
-        sidebarHeight = sidebarHeight - this.sidebar_padding - amount;
-        sidebarHeight = Math.min(sidebarHeight + 1, discussionBody.outerHeight());
-        sidebar.css('height', sidebarHeight);
-        postListWrapper = this.$('.post-list-wrapper');
-        return postListWrapper.css('height', (sidebarHeight - this.sidebar_header_height - 4) + 'px');
+        return sidebar.css('width', sidebarWidth + 'px');
       };
 
       DiscussionThreadListView.prototype.ignoreClick = function(event) {

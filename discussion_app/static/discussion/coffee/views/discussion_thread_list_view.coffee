@@ -57,11 +57,9 @@ if Backbone?
     updateSidebar: =>
 
       scrollTop = $(window).scrollTop();
-      windowHeight = $(window).height();
 
       discussionBody = $(".discussion-article")
       discussionsBodyTop = if discussionBody[0] then discussionBody.offset().top
-      discussionsBodyBottom = discussionsBodyTop + discussionBody.outerHeight()
 
       sidebar = $(".sidebar")
       if scrollTop > discussionsBodyTop - @sidebar_padding
@@ -71,19 +69,6 @@ if Backbone?
 
       sidebarWidth = .31 * $(".discussion-body").width();
       sidebar.css('width', sidebarWidth + 'px');
-
-      sidebarHeight = windowHeight - Math.max(discussionsBodyTop - scrollTop, @sidebar_padding)
-
-      topOffset = scrollTop + windowHeight
-      discussionBottomOffset = discussionsBodyBottom + @sidebar_padding
-      amount = Math.max(topOffset - discussionBottomOffset, 0)
-
-      sidebarHeight = sidebarHeight - @sidebar_padding - amount
-      sidebarHeight = Math.min(sidebarHeight + 1, discussionBody.outerHeight())
-      sidebar.css 'height', sidebarHeight
-
-      postListWrapper = @$('.post-list-wrapper')
-      postListWrapper.css('height', (sidebarHeight - @sidebar_header_height - 4) + 'px')
 
 
     # Because we want the behavior that when the body is clicked the menu is
