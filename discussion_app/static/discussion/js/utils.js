@@ -155,7 +155,7 @@
     };
 
     DiscussionUtil.safeAjax = function(params) {
-      var $elem, beforeSend, request,
+      var $elem, beforeSend, errorCallback, request,
         _this = this;
       $elem = params.$elem;
       if ($elem && $elem.attr("disabled")) {
@@ -176,11 +176,14 @@
           }
         }
       };
-      if (!params["error"]) {
-        params["error"] = function() {
-          return _this.discussionAlert(gettext("Sorry"), gettext("We had some trouble processing your request. Please ensure you have copied any unsaved work and then reload the page."));
-        };
-      }
+      errorCallback = params['error'] ? params['error'] : function() {
+        return _this.discussionAlert(gettext("Sorry"), gettext("We had some trouble processing your request. Please ensure you have copied any unsaved work and then reload the page."));
+      };
+      params['error'] = function(xhr, textStatus, errorThrown) {
+        if (textStatus !== 'abort') {
+          return errorCallback(xhr, textStatus, errorThrown);
+        }
+      };
       beforeSend();
       request = $.ajax(params).always(function() {
         if ($elem) {

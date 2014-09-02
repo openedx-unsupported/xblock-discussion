@@ -139,12 +139,14 @@ class @DiscussionUtil
           params["loadingCallback"].apply(params["$loading"])
         else
           params["$loading"].loading(params["takeFocus"])
-    if !params["error"]
-      params["error"] = =>
+    errorCallback = if params['error'] then params['error'] else =>
         @discussionAlert(
           gettext("Sorry"),
           gettext("We had some trouble processing your request. Please ensure you have copied any unsaved work and then reload the page.")
         )
+    params['error'] = (xhr, textStatus, errorThrown) =>
+      if textStatus != 'abort'
+        errorCallback(xhr, textStatus, errorThrown)
     beforeSend()
     request = $.ajax(params).always ->
       if $elem
