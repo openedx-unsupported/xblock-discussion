@@ -21,7 +21,7 @@ JS_URLS = [
     'discussion/js/vendor/underscore-min.js',
     'discussion/js/vendor/backbone-min.js',
     'discussion/js/vendor/mustache.js',
-    'discussion/js/vendor/mathjax-MathJax-c9db6ac/MathJax.js?config=default',
+    'discussion/js/vendor/mathjax-MathJax-60e0a8c/MathJax.js?config=default',
     'discussion/js/vendor/Markdown.Converter.js',
     'discussion/js/vendor/Markdown.Sanitizer.js',
     'discussion/js/vendor/Markdown.Editor.js',
