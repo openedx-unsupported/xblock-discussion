@@ -1,4 +1,5 @@
 import os
+import re
 import pkg_resources
 
 from mako.template import Template as MakoTemplate
@@ -21,7 +22,7 @@ JS_URLS = [
     'discussion/js/vendor/underscore-min.js',
     'discussion/js/vendor/backbone-min.js',
     'discussion/js/vendor/mustache.js',
-    'discussion/js/vendor/mathjax-MathJax-60e0a8c/MathJax.js?config=default',
+    '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.4.0/MathJax.js?config=TeX-MML-AM_HTMLorMML-full',
     'discussion/js/vendor/Markdown.Converter.js',
     'discussion/js/vendor/Markdown.Sanitizer.js',
     'discussion/js/vendor/Markdown.Editor.js',
@@ -62,14 +63,17 @@ CSS_URLS = [
     'discussion/css/vendor/font-awesome.css'
 ]
 
+def asset_url(name):
+    return name if re.match('^(https?:)?//', name) else static(name)
+
 def get_template_dir():
     return TEMPLATE_DIR
 
 def get_js_urls():
-    return [static(path) for path in JS_URLS]
+    return [asset_url(path) for path in JS_URLS]
 
 def get_css_urls():
-    return [static(path) for path in CSS_URLS]
+    return [asset_url(path) for path in CSS_URLS]
 
 # TODO Remove the all following lines, was used for testing as a standalone app.
 STATIC_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static')
