@@ -314,9 +314,9 @@
       DiscussionThreadListView.prototype.setTopicHack = function(boardNameContainer) {
         var boardName, item;
         item = $(boardNameContainer).closest('a');
-        boardName = item.find(".board-name").html();
+        boardName = item.find(".board-name").text();
         _.each(item.parents('ul').not('.browse-topic-drop-menu'), function(parent) {
-          return boardName = $(parent).siblings('a').find('.board-name').html() + ' / ' + boardName;
+          return boardName = $(parent).siblings('a').find('.board-name').text() + ' / ' + boardName;
         });
         return this.$(".current-board").html(this.fitName(boardName));
       };
@@ -324,9 +324,9 @@
       DiscussionThreadListView.prototype.setTopic = function(event) {
         var boardName, item;
         item = $(event.target).closest('a');
-        boardName = item.find(".board-name").html();
+        boardName = item.find(".board-name").text();
         _.each(item.parents('ul').not('.browse-topic-drop-menu'), function(parent) {
-          return boardName = $(parent).siblings('a').find('.board-name').html() + ' / ' + boardName;
+          return boardName = $(parent).siblings('a').find('.board-name').text() + ' / ' + boardName;
         });
         return this.$(".current-board").html(this.fitName(boardName));
       };
@@ -353,7 +353,7 @@
       };
 
       DiscussionThreadListView.prototype.fitName = function(name) {
-        var partialName, path, rawName, width, x;
+        var partialName, path, rawName, shortPrefix, width, x;
         this.maxNameWidth = (this.$el.width() * .8) - 50;
         width = this.getNameWidth(name);
         if (width < this.maxNameWidth) {
@@ -369,18 +369,19 @@
           }
           return _results;
         })();
+        shortPrefix = path.length > 1 ? gettext("…") + "/" : "";
         while (path.length > 1) {
           path.shift();
-          partialName = gettext("…") + "/" + path.join("/");
+          partialName = shortPrefix + path.join("/");
           if (this.getNameWidth(partialName) < this.maxNameWidth) {
             return partialName;
           }
         }
         rawName = path[0];
-        name = gettext("…") + "/" + rawName;
+        name = shortPrefix + rawName;
         while (this.getNameWidth(name) > this.maxNameWidth) {
           rawName = rawName.slice(0, rawName.length - 1);
-          name = gettext("…") + "/" + rawName + gettext("…");
+          name = shortPrefix + rawName + gettext("…");
         }
         return name;
       };
