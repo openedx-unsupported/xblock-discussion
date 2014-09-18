@@ -76,7 +76,7 @@
 
       DiscussionThreadInlineView.prototype.expandPost = function(event) {
         this.$el.addClass('expanded');
-        this.$el.find('.post-body').html(this.model.get('body'));
+        this.$el.find('.post-body').text(this.model.get('body'));
         this.showView.convertMath();
         this.$el.find('.expand-post').css('display', 'none');
         this.$el.find('.collapse-post').css('display', 'block');
@@ -97,7 +97,7 @@
           });
         }
         this.$el.removeClass('expanded');
-        this.$el.find('.post-body').html(this.model.get('abbreviatedBody'));
+        this.$el.find('.post-body').text(this.model.get('abbreviatedBody'));
         this.showView.convertMath();
         this.$el.find('.expand-post').css('display', 'block');
         this.$el.find('.collapse-post').css('display', 'none');
