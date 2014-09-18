@@ -74,8 +74,8 @@ The students will be able to post comments on the unit:
 Development
 -----------
 
-Node.js and npm are required to be able to compile the coffeescript
-files into javascript.
+Node.js and npm are required to be able to compile and combine the
+coffeescript files into a single minified javascript file.
 
 Install the node.js coffeescript module:
 
@@ -86,14 +86,25 @@ npm install
 When needed, re-compile the javascript files:
 
 ```bash
-./scripts/coffee.sh
+./scripts/buildjs.sh
 ```
+
+This will produce a new minified file under
+`discussion_app/static/discussion-xblock.$SHA.min.js`, where `$SHA` is
+the SHA hash of the file's contents.
+
+When you re-compile the javascript files, you need to update the value
+of the `JS_SHA` variable in `discussion_app/views.py`.
+
+If you add new JavaScript/CoffeeScript files, you need to add them to
+the list in `scripts/buildjs.sh` in order to include them in the
+compiled file.
 
 Running Tests
 -------------
 
 (available soon)
-
+/
 Quality Check
 -------------
 

@@ -12,6 +12,9 @@ from django.templatetags.static import static
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
 
+# Update this after building a new version of the minified JS file.
+JS_SHA = '25b31111c077'
+
 JS_URLS = [
     # VENDOR
     'discussion/js/vendor/split.js',
@@ -74,6 +77,11 @@ def get_js_urls():
 
 def get_css_urls():
     return [asset_url(path) for path in CSS_URLS]
+
+def get_minified_js_urls():
+    urls = ['//cdnjs.cloudflare.com/ajax/libs/mathjax/2.4.0/MathJax.js?config=TeX-MML-AM_HTMLorMML-full',
+            static('discussion-xblock.{}.min.js'.format(JS_SHA))]
+    return urls
 
 # TODO Remove the all following lines, was used for testing as a standalone app.
 STATIC_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static')
