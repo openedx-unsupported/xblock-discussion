@@ -266,16 +266,16 @@ if Backbone?
     # TODO get rid of this asap
     setTopicHack: (boardNameContainer) ->
       item = $(boardNameContainer).closest('a')
-      boardName = item.find(".board-name").html()
+      boardName = item.find(".board-name").text()
       _.each item.parents('ul').not('.browse-topic-drop-menu'), (parent) ->
-        boardName = $(parent).siblings('a').find('.board-name').html() + ' / ' + boardName
+        boardName = $(parent).siblings('a').find('.board-name').text() + ' / ' + boardName
       @$(".current-board").html(@fitName(boardName))
 
     setTopic: (event) ->
       item = $(event.target).closest('a')
-      boardName = item.find(".board-name").html()
+      boardName = item.find(".board-name").text()
       _.each item.parents('ul').not('.browse-topic-drop-menu'), (parent) ->
-        boardName = $(parent).siblings('a').find('.board-name').html() + ' / ' + boardName
+        boardName = $(parent).siblings('a').find('.board-name').text() + ' / ' + boardName
       @$(".current-board").html(@fitName(boardName))
 
     setSelectedTopic: (name) ->
@@ -301,16 +301,17 @@ if Backbone?
       if width < @maxNameWidth
         return name
       path = (x.replace /^\s+|\s+$/g, "" for x in name.split("/"))
+      shortPrefix = if path.length > 1 then (gettext("…") + "/") else ""
       while path.length > 1
         path.shift()
-        partialName = gettext("…") + "/" + path.join("/")
+        partialName = shortPrefix + path.join("/")
         if  @getNameWidth(partialName) < @maxNameWidth
           return partialName
       rawName = path[0]
-      name = gettext("…") + "/" + rawName
+      name = shortPrefix + rawName
       while @getNameWidth(name) > @maxNameWidth
         rawName = rawName[0...rawName.length-1]
-        name =  gettext("…") + "/" + rawName + gettext("…")
+        name =  shortPrefix + rawName + gettext("…")
       return name
 
     filterTopic: (event) ->
