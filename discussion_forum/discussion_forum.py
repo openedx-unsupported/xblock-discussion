@@ -20,7 +20,7 @@ from .utils import (
     render_mustache_templates
 )
 
-from discussion_app.views import get_js_urls, get_css_urls
+from discussion_app.views import get_minified_js_urls, get_css_urls
 
 # Globals ###########################################################
 
@@ -100,7 +100,7 @@ class DiscussionXBlock(XBlock, XBlockCourseMixin):
 
         fragment.add_content(render_mustache_templates())
 
-        for url in get_js_urls():
+        for url in get_minified_js_urls():
             fragment.add_javascript_url(url)
 
         for url in get_css_urls():
@@ -186,7 +186,7 @@ class DiscussionCourseXBlock(XBlock, XBlockCourseMixin):
 
         fragment.add_content(render_mustache_templates())
 
-        for url in get_js_urls():
+        for url in get_minified_js_urls():
             fragment.add_javascript_url(url)
 
         for url in get_css_urls():
