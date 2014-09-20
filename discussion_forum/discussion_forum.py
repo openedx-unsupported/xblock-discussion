@@ -46,10 +46,6 @@ class XBlockCourseMixin(object):
 
 @XBlock.needs('discussion')
 class DiscussionXBlock(XBlock, XBlockCourseMixin):
-    FIELDS_TO_INIT = ('discussion_id',)
-
-    discussion_id = String(scope=Scope.settings, default=lambda: uuid4().hex)
-
     display_name = String(
         display_name="Display Name",
         help="Display name for this module",
@@ -74,6 +70,10 @@ class DiscussionXBlock(XBlock, XBlockCourseMixin):
         scope=Scope.settings
     )
     sort_key = String(scope=Scope.settings)
+
+    @property
+    def discussion_id(self):
+        return self.scope_ids.usage_id.block_id
 
     def student_view(self, context=None):
         fragment = Fragment()
