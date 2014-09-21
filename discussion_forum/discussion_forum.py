@@ -29,23 +29,8 @@ log = logging.getLogger(__name__)
 # Classes ###########################################################
 
 
-class XBlockCourseMixin(object):
-    """XBlock Mixin for course properties/functions shared
-       between inline and course discussion xblocks.
-    """
-
-    @property
-    def course_id(self):
-        if hasattr(self, 'xmodule_runtime'):
-            if hasattr(self.xmodule_runtime.course_id, 'to_deprecated_string'):
-                return self.xmodule_runtime.course_id.to_deprecated_string()
-            else:
-                return self.xmodule_runtime.course_id
-        return 'None'
-
-
 @XBlock.needs('discussion')
-class DiscussionXBlock(XBlock, XBlockCourseMixin):
+class DiscussionXBlock(XBlock):
     display_name = String(
         display_name="Display Name",
         help="Display name for this module",
@@ -149,7 +134,7 @@ class DiscussionXBlock(XBlock, XBlockCourseMixin):
 
 
 @XBlock.needs('discussion')
-class DiscussionCourseXBlock(XBlock, XBlockCourseMixin):
+class DiscussionCourseXBlock(XBlock):
 
     display_name = String(
         display_name="Display Name",
