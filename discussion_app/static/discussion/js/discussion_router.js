@@ -76,7 +76,7 @@
           this.main.undelegateEvents();
         }
         this.main = new DiscussionThreadView({
-          el: $(".discussion-column"),
+          el: $(".forum-content"),
           model: this.thread
         });
         this.main.render();

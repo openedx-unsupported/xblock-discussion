@@ -46,7 +46,7 @@ if Backbone?
         @main.cleanup()
         @main.undelegateEvents()
 
-      @main = new DiscussionThreadView(el: $(".discussion-column"), model: @thread)
+      @main = new DiscussionThreadView(el: $(".forum-content"), model: @thread)
       @main.render()
       @main.on "thread:responses:rendered", =>
         @nav.updateSidebar()

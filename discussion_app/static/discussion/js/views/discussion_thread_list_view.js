@@ -140,7 +140,7 @@
         var amount, browseFilterHeight, discussionBody, discussionBottomOffset, discussionsBodyBottom, discussionsBodyTop, headerHeight, refineBarHeight, scrollTop, sidebar, sidebarHeight, topOffset, windowHeight;
         scrollTop = $(window).scrollTop();
         windowHeight = $(window).height();
-        discussionBody = $(".discussion-column");
+        discussionBody = $(".forum-content");
         discussionsBodyTop = discussionBody[0] ? discussionBody.offset().top : void 0;
         discussionsBodyBottom = discussionsBodyTop + discussionBody.outerHeight();
         sidebar = $(".forum-nav");
@@ -309,7 +309,7 @@
         var thread_id, url,
           _this = this;
         this.template = _.template($("#discussion-home").html());
-        $(".discussion-column").html(this.template);
+        $(".forum-content").html(this.template);
         $(".forum-nav-thread-list a").removeClass("is-active");
         $("input.email-setting").bind("click", this.updateEmailNotifications);
         url = DiscussionUtil.urlFor("notifications_status", window.user.get("id"));
