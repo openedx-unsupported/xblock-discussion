@@ -103,6 +103,7 @@ if Backbone?
               dataType: 'json'
               async: false # TODO when the rest of the stuff below is made to work properly..
               data:
+                  thread_type: "discussion"  # TODO: Support for edx-platform#4957
                   title: title
                   body: body
                   anonymous: anonymous

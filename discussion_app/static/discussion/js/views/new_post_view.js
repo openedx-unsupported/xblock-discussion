@@ -137,6 +137,7 @@
           dataType: 'json',
           async: false,
           data: {
+            thread_type: "discussion",
             title: title,
             body: body,
             anonymous: anonymous,
