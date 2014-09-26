@@ -1,0 +1,8 @@
+<%! from django.utils.translation import ugettext as _ %>
+##<%inherit file="../courseware/course_navigation.html" />
+
+<%block name="extratabs">
+% if has_permission_to_create_thread:
+    <li class="right"><a href="#" class="new-post-btn" role="button"><span class="icon icon-edit new-post-icon"></span>${_("New Post")}</a></li>
+% endif
+</%block>
