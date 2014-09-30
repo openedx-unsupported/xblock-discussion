@@ -64,6 +64,9 @@
       DiscussionRouter.prototype.showThread = function(forum_name, thread_id) {
         var _this = this;
         this.thread = this.discussion.get(thread_id);
+        if (!this.thread) {
+          return this.allThreads();
+        }
         this.thread.set("unread_comments_count", 0);
         this.thread.set("read", true);
         this.setActiveThread();
