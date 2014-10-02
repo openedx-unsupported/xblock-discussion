@@ -10,10 +10,9 @@ from django.http import HttpResponse
 
 from django.templatetags.static import static
 
-TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
+from . import js_version
 
-# Update this after building a new version of the minified JS file.
-JS_SHA = 'de092f6d5383'
+TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
 
 JS_URLS = [
     # VENDOR
@@ -80,7 +79,7 @@ def get_css_urls():
 
 def get_minified_js_urls():
     urls = ['//cdnjs.cloudflare.com/ajax/libs/mathjax/2.4.0/MathJax.js?config=TeX-MML-AM_HTMLorMML-full',
-            static('discussion-xblock.{}.min.js'.format(JS_SHA))]
+            static('discussion-xblock.{}.min.js'.format(js_version.SHA))]
     return urls
 
 # TODO Remove the all following lines, was used for testing as a standalone app.
