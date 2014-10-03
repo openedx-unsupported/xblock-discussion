@@ -62,11 +62,22 @@
       };
 
       DiscussionRouter.prototype.showThread = function(forum_name, thread_id) {
-        var _this = this;
+        var callback,
+          _this = this;
         this.thread = this.discussion.get(thread_id);
         if (!this.thread) {
-          return this.allThreads();
+          callback = function(thread) {
+            _this.thread = thread;
+            return _this.renderThreadView();
+          };
+          return this.retrieveSingleThread(forum_name, thread_id, callback);
+        } else {
+          return this.renderThreadView();
         }
+      };
+
+      DiscussionRouter.prototype.renderThreadView = function() {
+        var _this = this;
         this.thread.set("unread_comments_count", 0);
         this.thread.set("read", true);
         this.setActiveThread();
@@ -105,6 +116,24 @@
 
       DiscussionRouter.prototype.hideNewPost = function(event) {
         return this.newPost.slideUp(300);
+      };
+
+      DiscussionRouter.prototype.retrieveSingleThread = function(forum_name, thread_id, callback) {
+        var _this = this;
+        return DiscussionUtil.safeAjax({
+          url: DiscussionUtil.urlFor('retrieve_single_thread', forum_name, thread_id),
+          success: function(data, textStatus, xhr) {
+            return callback(new Thread(data['content']));
+          },
+          error: function(xhr) {
+            if (xhr.status === 404) {
+              DiscussionUtil.discussionAlert(gettext("Sorry"), gettext("The thread you selected has been deleted. Please select another thread."));
+            } else {
+              DiscussionUtil.discussionAlert(gettext("Sorry"), gettext("We had some trouble loading more responses. Please try again."));
+            }
+            return _this.allThreads();
+          }
+        });
       };
 
       return DiscussionRouter;
