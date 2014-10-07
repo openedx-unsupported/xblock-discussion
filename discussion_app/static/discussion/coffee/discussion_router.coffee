@@ -34,6 +34,9 @@ if Backbone?
       if !@thread
         callback = (thread) =>
           @thread = thread
+          # @discussion.add is reserved for new threads that the user creates,
+          # so we need to use @discussion.reset here.
+          @discussion.reset(@discussion.models.concat(thread))
           @renderThreadView()
         @retrieveSingleThread(forum_name, thread_id, callback)
       else
