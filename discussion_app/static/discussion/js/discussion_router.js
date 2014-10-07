@@ -68,6 +68,7 @@
         if (!this.thread) {
           callback = function(thread) {
             _this.thread = thread;
+            _this.discussion.reset(_this.discussion.models.concat(thread));
             return _this.renderThreadView();
           };
           return this.retrieveSingleThread(forum_name, thread_id, callback);
