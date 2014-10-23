@@ -27,6 +27,8 @@ if Backbone?
       anonymous          = false || @$("input.discussion-anonymous").is(":checked")
       anonymous_to_peers = false || @$("input.discussion-anonymous-to-peers").is(":checked")
       follow    = false || @$("input.discussion-follow").is(":checked")
+      # Temporary patch until questions are supported.
+      thread_type = 'discussion'
 
       url = DiscussionUtil.urlFor('create_thread', @topicId)
 
@@ -45,6 +47,7 @@ if Backbone?
           anonymous: anonymous
           anonymous_to_peers: anonymous_to_peers
           auto_subscribe: follow
+          thread_type: thread_type
         error: DiscussionUtil.formErrorHandler(@$(".new-post-form-errors"))
         success: (response, textStatus) =>
           # TODO: Move this out of the callback, this makes it feel sluggish
