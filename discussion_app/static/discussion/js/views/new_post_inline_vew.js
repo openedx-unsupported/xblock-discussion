@@ -28,7 +28,7 @@
       };
 
       NewPostInlineView.prototype.createPost = function(event) {
-        var anonymous, anonymous_to_peers, body, follow, group, title, url,
+        var anonymous, anonymous_to_peers, body, follow, group, thread_type, title, url,
           _this = this;
         event.preventDefault();
         title = this.$(".new-post-title").val();
@@ -37,6 +37,7 @@
         anonymous = false || this.$("input.discussion-anonymous").is(":checked");
         anonymous_to_peers = false || this.$("input.discussion-anonymous-to-peers").is(":checked");
         follow = false || this.$("input.discussion-follow").is(":checked");
+        thread_type = 'discussion';
         url = DiscussionUtil.urlFor('create_thread', this.topicId);
         return DiscussionUtil.safeAjax({
           $elem: $(event.target),
@@ -51,7 +52,8 @@
             group_id: group,
             anonymous: anonymous,
             anonymous_to_peers: anonymous_to_peers,
-            auto_subscribe: follow
+            auto_subscribe: follow,
+            thread_type: thread_type
           },
           error: DiscussionUtil.formErrorHandler(this.$(".new-post-form-errors")),
           success: function(response, textStatus) {
