@@ -1,6 +1,8 @@
 Discussion XBlock
 =================
 
+## Notice: This repo will be archived in April 2021.
+
 This is an initial prototype for redesigning Discussion. This project
 is in the early stages of development and is not ready for general
 use. The XBlock currently only works with the edx-solutions' forks of
